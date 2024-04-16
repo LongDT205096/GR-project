@@ -2,6 +2,7 @@
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import axios from "axios";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -38,6 +39,10 @@ const Login = () => {
         }
     };
 
+    const handleInputChange = () => {
+        setMessage("");
+    };
+
     return (
         <div>
           {message && <p>{message}</p>}
@@ -70,10 +75,10 @@ const Login = () => {
                       placeholder="Enter Email Address"
                       className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500 focus:bg-white focus:outline-none"
                       value={email}
-                    //   onChange={(e) => {
-                    //     setEmail(e.target.value);
-                    //     handleInputChange();
-                    //   }}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        handleInputChange();
+                      }}
                       autoFocus
                       autoComplete="true"
                       required
@@ -91,10 +96,10 @@ const Login = () => {
                         className="w-full px-4 py-3 rounded-lg bg-gray-200 mt-2 border focus:border-blue-500
                         focus:bg-white focus:outline-none"
                         value={password}
-                        // onChange={(e) => {
-                        //     setPassword(e.target.value);
-                        //     handleInputChange();
-                        // }}
+                        onChange={(e) => {
+                            setPassword(e.target.value);
+                            handleInputChange();
+                        }}
                         required
                     />
                   </div>

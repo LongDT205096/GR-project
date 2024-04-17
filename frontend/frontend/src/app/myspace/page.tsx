@@ -7,11 +7,13 @@ import { useState, useEffect } from 'react';
 
 const MySpace = () => {
     const [user, setUser] = useState(false);
-    useEffect(() => {
-        setUser(checkAuthenticated());
+    useEffect(() => { const fetchData = async () => {
+        const isAuthenticated = await checkAuthenticated();
+        setUser(isAuthenticated as boolean);
+    };
+        fetchData();
     }, []);
 
-    console.log(user);
     return (
         <div className='h-[100vh]  w-full overflow-hidden'>
             { user ?(<ProfilePage/>):(<Notlogin/>)}

@@ -20,11 +20,12 @@ from django.urls import path, include
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('Apps.Account.urls')),
+    path('profile/', include('Apps.Profile.urls')),
     # path('movie/', include('Apps.Movie.urls')),
     # path('actor/', include('Apps.Actor.urls')),
     # path('director/', include('Apps.Director.urls')),
     # path('rate/', include('Apps.Rate.urls')),
     # path('comment/', include('Apps.Comment.urls')),
     # path('watchlist/', include('Apps.Watchlist.urls')),
-    # path('user/', include('Apps.User.urls')),
+    
 ]

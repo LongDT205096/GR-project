@@ -1,6 +1,6 @@
-const base = '/account/auth/'
+const base = '/account/auth/';
 
-const request = {
+const auth_request = {
     fetchRegister: base + "users/",
     fetchUser: base + 'users/me/',
     fetchActivate: base + 'users/activation/',
@@ -13,5 +13,5 @@ const request = {
     fetchVerify: base + 'jwt/verify/',
 }
 
-export default request;
+export default auth_request;
 

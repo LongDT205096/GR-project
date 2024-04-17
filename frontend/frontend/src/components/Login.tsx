@@ -1,8 +1,8 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
+import { login } from "@/actions/auth";
 import Link from "next/link";
-import axios from "axios";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -19,24 +19,25 @@ const Login = () => {
         }
     }, []);
 
-    const login = async () => {
-        const response = await fetch("/api/login", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ email, password }),
-        });
+    const loginByGoogle = async () => {
+    };
 
-        const data = await response.json();
+    async function handleSubmit(event: { preventDefault: () => void; }) {
+        event.preventDefault();
 
-        if (data.error) {
-            setMessage(data.error);
-            setMessageType("danger");
-        } else {
-            localStorage.setItem("token", data.token);
+        await login(email, password)
+        .then((res) => {
+            console.log(res.data);
+            setMessage("Login successful");
+            setMessageType("success");
+            localStorage.setItem("token", res.data.access);
             router.push("/myspace");
-        }
+        })
+        .catch((err) => {
+            const error = JSON.parse(err.request.response);
+            setMessage(error[Object.keys(error)[0]].join(" "));
+            setMessageType("danger");
+        });
     };
 
     const handleInputChange = () => {
@@ -63,11 +64,10 @@ const Login = () => {
                 </p>
                 <form
                   className="mt-6 text-black"
-                  
-                  method="POST"
+                  onSubmit={handleSubmit}
                 >
                   <div>
-                    <label className="block text-white">Email Address</label>
+                    <label className="block text-white">Email address</label>
                     <input
                       type="email"
                       name=""
@@ -120,7 +120,7 @@ const Login = () => {
                 </div>
     
                 <button
-                  onClick={login}
+                  onClick={loginByGoogle}
                   className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 "
                 >
                   <svg

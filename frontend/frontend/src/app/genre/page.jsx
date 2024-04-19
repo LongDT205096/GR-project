@@ -1,24 +1,28 @@
 import React from "react";
 
-import requests from "@/utils/requests";
 import Link from "next/link";
+import axios from "axios";
+import movie_request from "@/utils/movie";
 
+axios.defaults.withCredentials = true;
+axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 
 async function getGenreResponse() {
-  const GenreApiresponse = await fetch(`${requests.fetchGenre}`, {
-    cache: "no-store",
-  });
+  const GenreApiresponse = await axios.get(movie_request.fetchGenre, {
+    headers: {
+        'Content-Type': 'application/json'
+    }
+});
 
-  if (!GenreApiresponse.ok) {
+  if (GenreApiresponse.status !== 200) {
     return new Error("data not fetching!");
   }
 
-  return GenreApiresponse.json();
+  return GenreApiresponse.data;
 }
 
 const Genre = async () => {
-  const GenreResultData = await getGenreResponse();
-  const genredata = GenreResultData.genres;
+  const genreData = await getGenreResponse();
 
   return (
     <div>
@@ -26,8 +30,8 @@ const Genre = async () => {
         <h1>Genre</h1>
       </div>
       <div className="w-full h-full p-5 grid md:grid-cols-3 grid-cols-1 gap-4 justify-center items-center">
-        {genredata.map((genre, index) => (
-          <Link href={`/genre/${genre.id}/page/1`} key={index}>
+        {genreData.map((genre, index) => (
+          <Link href={`/genres/${genre.id}/page/1`} key={index}>
             <div
               className="genre_container rounded-md"
               style={{

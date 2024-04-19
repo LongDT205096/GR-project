@@ -52,10 +52,10 @@ INSTALLED_APPS = [
     #models
     'Apps.Account',
     'Apps.Actor',
-    'Apps.Comment',
     'Apps.Director',
     'Apps.Movie',
     'Apps.Rate',
+    'Apps.Review',
     'Apps.Profile',
     'Apps.Watchlist',
 ]
@@ -74,6 +74,7 @@ MIDDLEWARE = [
 
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
+        'rest_framework.permissions.AllowAny',
         'rest_framework.permissions.IsAuthenticated',
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': (
@@ -171,13 +172,11 @@ EMAIL_USE_TLS = True
 #SIMPLE JWT SETTINGS
 SIMPLE_JWT = {
     'ACCESS_TOKEN_LIFETIME': timedelta(minutes=180),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=50),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
     'ROTATE_REFRESH_TOKENS': True,
     'BLACKLIST_AFTER_ROTATION': True,
     'UPDATE_LAST_LOGIN': False,
-
     'ALGORITHM': 'HS256',
-
     'VERIFYING_KEY': None,
     'AUDIENCE': None,
     'ISSUER': None,

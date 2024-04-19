@@ -1,8 +1,8 @@
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
-import { BiHome, BiMoviePlay, BiSearchAlt, BiTv } from "react-icons/bi";
-import { FaFortAwesomeAlt, FaTheaterMasks } from "react-icons/fa";
+import { BiHome, BiMoviePlay, BiSearchAlt, BiSolidLogOut, BiTv } from "react-icons/bi";
+import { FaTheaterMasks } from "react-icons/fa";
 import MySpaceIcon from "./MySpaceIcon";
 
 const Navbar = () => {
@@ -60,6 +60,13 @@ const Navbar = () => {
           >
             <MySpaceIcon />
             <span className="navtext hidden font-bold">My Space</span>
+          </Link>
+
+          <Link 
+          href={'/logout'}
+          className="flex items-center link-container hover:text-white">
+            <BiSolidLogOut className="p-3 text-5xl" />
+            <span className="navtext hidden font-bold">Logout</span>
           </Link>
         </div>
       </div>

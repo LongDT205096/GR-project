@@ -1,11 +1,11 @@
 "use client"
 
 import Notlogin from '@/components/Notlogin';
-import ProfilePage from '@/components/ProfilePage';
+import MySpace from '@/components/MySpace';
 import { checkAuthenticated } from '@/actions/auth';
 import { useState, useEffect } from 'react';
 
-const MySpace = () => {
+const MySpacePage = () => {
     const [user, setUser] = useState(false);
     useEffect(() => { const fetchData = async () => {
         const isAuthenticated = await checkAuthenticated();
@@ -16,9 +16,9 @@ const MySpace = () => {
 
     return (
         <div className='h-[100vh]  w-full overflow-hidden'>
-            { user ?(<ProfilePage/>):(<Notlogin/>)}
+            { user ?(<MySpace/>):(<Notlogin/>)}
         </div>
     )
 }
 
-export default MySpace
+export default MySpacePage;

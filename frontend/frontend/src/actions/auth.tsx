@@ -71,3 +71,16 @@ export const getUser = async () => {
     return axios.get(profile_request.fetchProfile, config)
 };
 
+
+export function updateUser(data: any) {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json'
+        }
+    }
+
+    axios.put(profile_request.fetchUpdateProfile, data, config)
+}

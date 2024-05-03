@@ -10,7 +10,7 @@ const MySpacePage = () => {
     useEffect(() => { const fetchData = async () => {
         const isAuthenticated = await checkAuthenticated();
         setUser(isAuthenticated as boolean);
-    };
+    };  
         fetchData();
     }, []);
 

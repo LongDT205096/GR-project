@@ -1,5 +1,6 @@
 from django.db import models
 
+
 class Genre(models.Model):
     GENRE_CHOICES = [
         ('Action', 'Action'),
@@ -33,7 +34,7 @@ class Genre(models.Model):
 
     name = models.CharField(max_length=50, choices=GENRE_CHOICES)
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.name
 
 
@@ -44,12 +45,35 @@ class Movie(models.Model):
     ave_rate = models.FloatField(default=0.0)
     summary = models.CharField(max_length=2000, blank=True, null=True)
     synopsis = models.TextField(max_length=15000, blank=True, null=True)
-    trailer = models.URLField(max_length=500, blank=True, null=True)
-    poster = models.URLField(max_length=500, blank=True, null=True)
     genres = models.ManyToManyField(Genre)
     director = models.ForeignKey("Director.Director", on_delete=models.CASCADE)
     actors = models.ManyToManyField("Actor.Actor")
 
-    def __str__(self) -> str:
+    def __str__(self):
         return self.title
+
+
+class Trailer(models.Model):
+    TYPE_CHOICES = [
+        ("Trailers", "Trailers"),
+        ("Teasers", "Teasers"),
+        ("Clips", "Clips"),
+        ("Behind the Scene", "Behind the Scene"),
+        ("Bloopers", "Bloopers"),
+        ("Featurettes", "Featurettes"),
+        ("Opening Credits", "Opening Credits"),
+    ]
+
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    title = models.CharField(max_length=50)
+    link = models.FileField(null=True, blank=True)
+    type = models.CharField(max_length=50, choices=TYPE_CHOICES)
+
+    def __str__(self):
+        return self.title
+
+
+class Image(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    image = models.ImageField(null=True, blank=True)
 

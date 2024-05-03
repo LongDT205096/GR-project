@@ -42,7 +42,7 @@ const Register = () => {
                 </div>
                 <div className="sm:w-1/2 w-full p-2 flex flex-col justify-center items-center">
                     <form onSubmit={handleSubmit} className="text-black">
-                    {message && <p>{message}</p>}
+                    {message && <p className="text-[#f0fdf4]">{message}</p>}
                         <input
                             type="email"
                             placeholder="Enter email"

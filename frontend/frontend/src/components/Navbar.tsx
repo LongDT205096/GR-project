@@ -34,13 +34,6 @@ const Navbar = () => {
                         <span className="navtext hidden font-bold">Search</span>
                     </Link>
                     <Link
-                        href={"/ott"}
-                        className="flex items-center link-container hover:text-white"
-                    >
-                        <BiTv className="p-3 text-5xl" />
-                        <span className="navtext hidden font-bold">OTT</span>
-                    </Link>
-                    <Link
                         href={"/movie/page/1"}
                         className="flex items-center link-container hover:text-white"
                     >

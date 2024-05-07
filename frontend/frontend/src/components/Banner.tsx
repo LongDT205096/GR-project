@@ -23,7 +23,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
             try {
                 if (firstbannerContent.media_type == 'movie') {
                     var movieDetails = await fetch(
-                        `${requests.fetchMovieDetails}${firstbannerContent.id}?api_key=${process.env.NEXT_PUBLIC_API_KEY}&append_to_response=images`,
+                        `${requests.fetchMovieDetails}${firstbannerContent.id}?api_key=e4d2477534d5a54cb6f0847a0ee853eb&append_to_response=images`,
                         {
                             cache: "no-store",
                         }
@@ -32,7 +32,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
                 }
                 else {
                     var movieDetails = await fetch(
-                        `${requests.fetchSeriesDetails}${firstbannerContent.id}?api_key=${process.env.NEXT_PUBLIC_API_KEY}&append_to_response=images`,
+                        `${requests.fetchSeriesDetails}${firstbannerContent.id}?api_key=e4d2477534d5a54cb6f0847a0ee853eb&append_to_response=images`,
                         {
                             cache: "no-store",
                         }
@@ -104,10 +104,9 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
     var release_year = "";
     if (
         bannerMovieDetails &&
-        (bannerMovieDetails.release_date || bannerMovieDetails.first_air_date)
+        (bannerMovieDetails.release_date)
     ) {
-        const dateStr =
-            bannerMovieDetails.release_date || bannerMovieDetails.first_air_date;
+        const dateStr = bannerMovieDetails.release_date;
         const release_date = new Date(dateStr);
 
         if(dateStr !== ''){

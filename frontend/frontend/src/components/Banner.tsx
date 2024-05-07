@@ -104,10 +104,9 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
     var release_year = "";
     if (
         bannerMovieDetails &&
-        (bannerMovieDetails.release_date || bannerMovieDetails.first_air_date)
+        (bannerMovieDetails.release_date)
     ) {
-        const dateStr =
-            bannerMovieDetails.release_date || bannerMovieDetails.first_air_date;
+        const dateStr = bannerMovieDetails.release_date;
         const release_date = new Date(dateStr);
 
         if(dateStr !== ''){

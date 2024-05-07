@@ -28,6 +28,38 @@ export const login = async (email: string, password: string) => {
 }
 
 
+export const logout = async () => {
+    const token = localStorage.getItem('token');
+}
+
+
+export const changePassword = async (new_password: string, re_new_password: string, current_password: string) => {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json'
+        }
+    };
+    const body = JSON.stringify({new_password, re_new_password, current_password });
+
+    return axios.post(auth_request.fetchChangePassword, body, config);
+}
+
+
+export const resetPassword = async (email: string) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+    const body = JSON.stringify({ email });
+
+    return axios.post(auth_request.fetchResetPassword, body, config);
+}
+
+
 export const checkAuthenticated = () => {
     return new Promise(async (resolve, reject) => {
         const token = localStorage.getItem('token');

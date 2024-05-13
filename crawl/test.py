@@ -98,9 +98,25 @@ def get_movie_images(driver, movie_id):
         })
 
 
+def get_movie_imdb_id(driver):
+    file = open('movie_list.json', 'r')
+    data = json.load(file)
+    imdb_ids = []
+    with open('movie_imdb_id.json', 'w') as f:
+        for movie in data:
+            tmdb_id = list(movie.keys())[0]
+            driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/external_ids?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+            details = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
+            imdb_ids.append({
+                movie[tmdb_id]: details['imdb_id']
+            })
+            print(f'{movie["id"]} {movie[tmdb_id]} done')
+        json.dump(imdb_ids, f, indent=4)
+
+
 def main():
     driver = webdriver.Chrome()
-
+    get_movie_imdb_id(driver)
 
 
 if __name__ == '__main__':

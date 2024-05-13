@@ -1,4 +1,5 @@
 from django.db import models
+from django_countries.fields import CountryField
 
 
 class Genre(models.Model):
@@ -45,6 +46,9 @@ class Movie(models.Model):
     ave_rate = models.FloatField(default=0.0)
     summary = models.CharField(max_length=2000, blank=True, null=True)
     synopsis = models.TextField(max_length=15000, blank=True, null=True)
+    revenue = models.IntegerField(default=0)
+    budget = models.IntegerField(default=0)
+    original_country = CountryField(blank_label="(select country)", blank=True)
     genres = models.ManyToManyField(Genre)
     director = models.ForeignKey("Director.Director", on_delete=models.CASCADE)
     actors = models.ManyToManyField("Actor.Actor")

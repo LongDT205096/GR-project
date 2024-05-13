@@ -142,9 +142,6 @@ def get_movie_images(driver, movie_id):
         })
 
 
-
-
-
 def main():
     driver = webdriver.Chrome()
     get_movie_synopsis(driver)

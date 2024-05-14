@@ -1,11 +1,27 @@
+'use client'
 import Link from "next/link";
 import React from "react";
 import Image from "next/image";
 import { BiHome, BiMoviePlay, BiSearchAlt, BiSolidLogOut, BiTv } from "react-icons/bi";
 import { FaTheaterMasks } from "react-icons/fa";
 import MySpaceIcon from "./MySpaceIcon";
+import { checkAuthenticated } from '@/actions/auth';
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
+    const [user, setUser] = useState(false);
+    useEffect(() => { const fetchData = async () => {
+        const isAuthenticated = await checkAuthenticated();
+        setUser(isAuthenticated as boolean);
+    };  
+        fetchData();
+    }, []);
+
+    const logout = () => {
+        localStorage.removeItem("token");
+        window.location.href = "/";
+    };
+
     return (
         <div className="w-full sm:hover:w-48 sidebar flex flex-row sm:flex-col bg-gradient-to-l sm:from-transparent sm:to-neutral-950 text-slate-400 p-3 h-full from-neutral-950 to-neutral-950 rounded-t-2xl sm:rounded-t-none">
             <div className="logo_container sm:block hidden h-[10%] flex-initial cursor-pointer">
@@ -47,19 +63,20 @@ const Navbar = () => {
                         <FaTheaterMasks className="p-3 text-5xl" />
                         <span className="navtext hidden font-bold">Genre</span>
                     </Link>
+
                     <Link
-                        href={"/myspace"}
+                        href={ user ? ("/myspace") : ("/login") }
                         className="flex items-center link-container hover:text-white"
-                    >
+                    >   
                         <MySpaceIcon />
                         <span className="navtext hidden font-bold">My Space</span>
-                    </Link>
+                    </Link>                    
 
-                    {/* <button onClick={logout}
+                    <button onClick={logout}
                         className="flex items-center link-container hover:text-white">
                         <BiSolidLogOut className="p-3 text-5xl" />
                         <span className="navtext hidden font-bold">Logout</span>
-                    </button> */}
+                    </button>
                 </div>
             </div>
         </div>

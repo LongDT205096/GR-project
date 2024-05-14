@@ -6,7 +6,7 @@ import 'material-icons/iconfont/material-icons.css';
 const outfit = Outfit({ subsets: ['latin'] })
 
 export const metadata = {
-  title: 'Cinemovia || Movies,Series and their details',
+  title: 'Cinemovia',
   description: 'A Movie review app ',
   icons: {
     icon: "./favicon.ico",

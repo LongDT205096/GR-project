@@ -40,7 +40,6 @@ const SwipableSlider = ({ Categories }: { Categories: any[] }) => {
                     {Categories &&
                         Categories.map(
                             (category, index) =>
-
                                 category.poster_path && (
                                     <div key={index} className="embla__slide flex-none mx-1.5 w-1/8">
                                         <Link href={`/${category.number_of_episodes ? 'ott/details' : 'movies'}/${category.id}`}>

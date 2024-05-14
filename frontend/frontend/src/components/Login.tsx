@@ -34,7 +34,8 @@ const Login = () => {
             })
             .catch((err) => {
                 const error = JSON.parse(err.request.response);
-                setMessage(error[Object.keys(error)[0]].join(" "));
+                console.log(error);
+                setMessage(error.detail);
                 setMessageType("danger");
             });
     };
@@ -45,8 +46,6 @@ const Login = () => {
 
     return (
         <div>
-            {message && <p>{message}</p>}
-
             <section className="border-red-500 min-h-screen flex items-center justify-center">
                 <div className="bg-neutral-700 p-5 flex rounded-2xl shadow-lg w-[95%] mx-auto md:max-w-4xl">
                     <div className="w-3/5 md:block hidden overflow-hidden">
@@ -102,7 +101,10 @@ const Login = () => {
                                     required
                                 />
                             </div>
-
+                            <div>
+                                {message && <label className="block text-slate-300 mt-4">{message}</label>}
+                            </div>
+                            
                             <button
                                 type="submit"
                                 className="w-full block bg-black hover:bg-black/75 focus:bg-black/50 text-white font-semibold rounded-lg

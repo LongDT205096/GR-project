@@ -28,11 +28,6 @@ export const login = async (email: string, password: string) => {
 }
 
 
-export const logout = async () => {
-    const token = localStorage.getItem('token');
-}
-
-
 export const changePassword = async (new_password: string, re_new_password: string, current_password: string) => {
     const token = localStorage.getItem('token');
     const config = {
@@ -93,14 +88,17 @@ export const checkAuthenticated = () => {
 export const getUser = async () => {
     const token = localStorage.getItem('token');
 
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json'
+    if(token) {
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            }
         }
+        return axios.get(profile_request.fetchProfile, config)
     }
-    return axios.get(profile_request.fetchProfile, config)
+    return null;
 };
 
 

@@ -29,8 +29,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
                         }
                     );
 
-                }
-                else {
+                } else {
                     var movieDetails = await fetch(
                         `${requests.fetchSeriesDetails}${firstbannerContent.id}?api_key=e4d2477534d5a54cb6f0847a0ee853eb&append_to_response=images`,
                         {

@@ -145,8 +145,8 @@ def get_movie_images(driver, movie_id):
 
 def main():
     driver = webdriver.Chrome()
-    # get_movie_synopsis(driver)
-    get_movie_imdb_id(driver)
+    get_movie_synopsis(driver)
+    # get_movie_imdb_id(driver)
 
 
 if __name__ == '__main__':

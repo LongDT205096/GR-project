@@ -45,7 +45,17 @@ def sort_data():
 
 
 def main():
-    pass
+    movie_id = 1701
+    with open("movie_list.json", "r") as f:
+        data = json.load(f)
+        f.close()
+
+    with open("movie_list.json", "w") as f:
+        for movie in data:
+            movie["id"] = movie_id
+            movie_id += 1
+        json.dump(data, f, indent=4)
+        f.close()
 
 
 if __name__ == "__main__":

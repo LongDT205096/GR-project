@@ -1,12 +1,14 @@
 'use client'
 import Link from "next/link";
-import React from "react";
+import React, { use } from "react";
 import Image from "next/image";
 import { BiHome, BiMoviePlay, BiSearchAlt, BiSolidLogOut, BiTv } from "react-icons/bi";
 import { FaTheaterMasks } from "react-icons/fa";
-import MySpaceIcon from "./MySpaceIcon";
-import { checkAuthenticated } from '@/actions/auth';
 import { useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
+
+import { checkAuthenticated } from "@/actions/auth";
+import MySpaceIcon from "./MySpaceIcon";
 
 const Navbar = () => {
     const [user, setUser] = useState(false);
@@ -15,11 +17,13 @@ const Navbar = () => {
         setUser(isAuthenticated as boolean);
     };  
         fetchData();
-    }, []);
+    }, [user]);
+
+    const router = useRouter();
 
     const logout = () => {
         localStorage.removeItem("token");
-        window.location.href = "/";
+        router.push("/login");
     };
 
     return (
@@ -72,11 +76,12 @@ const Navbar = () => {
                         <span className="navtext hidden font-bold">My Space</span>
                     </Link>                    
 
-                    <button onClick={logout}
+                    {user ? ( <button onClick={logout}
                         className="flex items-center link-container hover:text-white">
                         <BiSolidLogOut className="p-3 text-5xl" />
                         <span className="navtext hidden font-bold">Logout</span>
-                    </button>
+                    </button> ) : <></>}
+                    
                 </div>
             </div>
         </div>

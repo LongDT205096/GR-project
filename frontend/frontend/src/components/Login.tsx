@@ -1,8 +1,9 @@
 "use client"
 import { useRouter } from "next/navigation";
 import { useEffect, useState } from "react";
-import { login } from "@/actions/auth";
 import Link from "next/link";
+
+import { login } from "@/actions/auth";
 
 const Login = () => {
     const [email, setEmail] = useState("");
@@ -30,6 +31,7 @@ const Login = () => {
                 setMessage("Login successful");
                 setMessageType("success");
                 localStorage.setItem("token", res.data.access);
+                router.refresh();
                 router.push("/myspace");
             })
             .catch((err) => {

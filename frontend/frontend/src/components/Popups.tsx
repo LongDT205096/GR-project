@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 
-const Popups = ({ children, targetItem }) => {
+const Popups = ({ children, targetItem }: { children: React.ReactNode, targetItem: string }) => {
   const [isOpen, setisOpen] = useState(false);
 
   const PopupOpen = () => {

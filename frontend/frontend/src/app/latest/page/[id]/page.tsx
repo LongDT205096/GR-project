@@ -54,7 +54,7 @@ function Latest({ params }: { params: { id: string } }) {
                 {resultMovie.map((moviename: any, index) => (
                     moviename.poster_path && (
                         <div key={index} className="m-4 mb-8 px-4 mx-auto">
-                            <div className="flex flex-col h-full rounded-lg bg-white shadow-lg">
+                            <div className="flex flex-col h-full rounded-lg bg-gray-200 shadow-lg">
                                 <Link href={`/movies/${moviename.id}`} className="flex flex-col flex-grow">
                                     <div className="oot-card p-2 flex-grow">
                                         <Image
@@ -74,7 +74,7 @@ function Latest({ params }: { params: { id: string } }) {
                                             <p className="text-lg text-gray-700 font-semibold">Hello</p>
                                         </div>
                                         <p className="mb-4 text-sm text-gray-700">Director: John Doe</p>
-                                        <a href="#" className="mt-auto block rounded-lg bg-blue-500 px-4 py-2 text-center font-semibold text-white hover:bg-blue-600">Watch Trailer</a>
+                                        <a href="#" className="mt-auto block rounded-lg bg-gray-500 px-4 py-2 text-center font-semibold text-white hover:bg-blue-600">Watch Trailer</a>
                                     </div>
                                 </Link>
                             </div>

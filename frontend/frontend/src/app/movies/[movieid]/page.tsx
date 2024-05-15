@@ -1,13 +1,15 @@
 import React from "react";
 import Image from "next/image";
+import Link from "next/link";
+
 import requests from "@/utils/requests";
 import CastCarousel from "@/components/Cast";
 import SwipableSlider from "@/components/SwipableSlider";
 // import OtherImageGallery from "@/components/OtherImageGallery";
-// import FavoriteIcon from "@/components/FavoriteIcon";
-// import Trailer from "@/components/Trailer";
+import FavoriteIcon from "@/components/FavoriteIcon";
+import Trailer from "@/components/Trailer";
 // import Review from "@/components/Review";
-import Link from "next/link";
+
 
 const bannerpath = "https://image.tmdb.org/t/p/original/";
 const posterpath = "https://image.tmdb.org/t/p/w500";
@@ -158,11 +160,11 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
                                     movieDataAll.vote_average.toFixed(1) + "/ " + "10"}
                             </li>
                             <li className="flex items-center justify-center rounded-full bg-black p-4">
-                                {/* <FavoriteIcon favMovie={movieDataAll.id} /> */}
+                                <FavoriteIcon favMovie={movieDataAll.id} />
                             </li>
                         </ul>
                         <p className="font-light my-2 md:w-2/3 w-[95%] px-4 md:mx-0 mx-auto">{movieDataAll.overview}</p>
-                        {/* <Trailer movieId={movieDataAll.id} /> */}
+                        <Trailer movieId={movieDataAll.id} />
                     </div>
                 </div>
             </div>

@@ -21,7 +21,7 @@ const SwipableSlider = ({ Categories }: { Categories: any[] }) => {
         const handleResize = () => {
             setWindowWidth(window.innerWidth);
             if (emblaApi) {
-                emblaApi.reInit(); // Reinitialize Embla Carousel on resize
+                emblaApi.reInit();
             }
         };
 

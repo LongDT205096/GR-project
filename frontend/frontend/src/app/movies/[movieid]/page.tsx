@@ -11,7 +11,7 @@ import Link from "next/link";
 
 const bannerpath = "https://image.tmdb.org/t/p/original/";
 const posterpath = "https://image.tmdb.org/t/p/w500";
-async function getMovieResponse(params: { movieid: any; }) {
+async function getMovieResponse(params: { movieid: string; }) {
     const MovieApiresponse = await fetch(
         `${requests.fetchMovieDetails}${params.movieid}?api_key=e4d2477534d5a54cb6f0847a0ee853eb&append_to_response=images`,
         {
@@ -25,7 +25,7 @@ async function getMovieResponse(params: { movieid: any; }) {
 
     return MovieApiresponse.json();
 }
-async function getMovieCast(params: { movieid: any; }) {
+async function getMovieCast(params: { movieid: string }) {
     const MovieCastresponse = await fetch(
         `${requests.fetchMovieDetails}${params.movieid}/credits?api_key=e4d2477534d5a54cb6f0847a0ee853eb`,
         {
@@ -40,7 +40,7 @@ async function getMovieCast(params: { movieid: any; }) {
     return MovieCastresponse.json();
 }
 
-async function getMovieImages(params: { movieid: any; }) {
+async function getMovieImages(params: { movieid: string; }) {
     const OtherGalleryImages = await fetch(
         `${requests.fetchMovieDetails}${params.movieid}/images?api_key=${process.env.NEXT_PUBLIC_API_KEY}`,
         {

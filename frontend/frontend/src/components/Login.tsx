@@ -47,15 +47,8 @@ const Login = () => {
     return (
         <div>
             <section className="border-red-500 min-h-screen flex items-center justify-center">
-                <div className="bg-neutral-700 p-5 flex rounded-2xl shadow-lg w-[95%] mx-auto md:max-w-4xl">
-                    <div className="w-3/5 md:block hidden overflow-hidden">
-                        <img
-                            src="assets/img/log_in.jpg"
-                            className="rounded-2xl h-full"
-                            alt="page img"
-                        />
-                    </div>
-                    <div className="md:w-2/5 px-5">
+                <div className="bg-neutral-700 p-5 flex rounded-2xl shadow-lg w-[95%] mx-auto md:max-w-xl items-center justify-center">
+                    <div className="w-full px-5">
                         <h2 className="text-2xl font-bold text-white">Login</h2>
                         <p className="text-sm mt-4 text-white">
                             If you have an account, please login

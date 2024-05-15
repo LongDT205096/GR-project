@@ -50,7 +50,7 @@ const Navbar = () => {
                         <span className="navtext hidden font-bold">Search</span>
                     </Link>
                     <Link
-                        href={"/movie/page/1"}
+                        href={"/latest/page/1"}
                         className="flex items-center link-container hover:text-white"
                     >
                         <BiMoviePlay className="p-3 text-5xl" />

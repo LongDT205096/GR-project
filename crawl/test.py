@@ -128,6 +128,7 @@ def get_movie_images(driver, movie_id):
     data = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     backdrops = data['backdrops']
     posters = data['posters']
+    logos = data['logos']
     for image in backdrops:
         images.append({
             "movie_id": movie_id,
@@ -142,12 +143,10 @@ def get_movie_images(driver, movie_id):
             "type": "poster"
         })
 
-
 def main():
     driver = webdriver.Chrome()
-    get_movie_synopsis(driver)
+    # get_movie_synopsis(driver)
     # get_movie_imdb_id(driver)
-
 
 if __name__ == '__main__':
     main()

@@ -30,37 +30,36 @@ def export_to_json(data, file_name):
 #         json.dump(movies, f, indent=4)
 #
 #
-def get_movie_details(driver):
-    file = open('movie_list.json', 'r')
-    data = json.load(file)
-    movie_list = []
-    movie_id = 0
+# def get_movie_details(driver):
+#     file = open('movie_list.json', 'r')
+#     data = json.load(file)
+#     movie_list = []
+#     movie_id = 0
 
-    with open('movie_details_list.json', 'w') as f:
-        for movie in data:
-            tmdb_id = list(movie.keys())[0]
-            title = movie[tmdb_id]
-            driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
-            details = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
-            movie_list.append({
-                "id": movie_id,
-                "tmdb_id": tmdb_id,
-                "title": details.get('title'),
-                "release_date": details.get('release_date'),
-                "duration": details.get('runtime'),
-                "ave_rate": 0.0,
-                "poster_path": details.get('poster_path'),
-                "backdrop_path": details.get('backdrop_path'),
-                "origin_country": details.get('origin_country'),
-                "summary": details.get('overview'),
-                "revenue": details.get('revenue'),
-                "budget": details.get('budget'),
-                "genres": [genre.get('name') for genre in details.get('genres')],
-            })
-            print(movie_id, f'{title} done')
-            print(movie_list[0])
-            movie_id += 1
-        json.dump(movie_list, f, indent=4)
+#     with open('movie_details.json', 'w') as f:
+#         for movie in data:
+#             tmdb_id = list(movie.keys())[0]
+#             title = movie[tmdb_id]
+#             driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+#             details = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
+#             movie_list.append({
+#                 "id": movie_id,
+#                 "tmdb_id": tmdb_id,
+#                 "title": details.get('title'),
+#                 "release_date": details.get('release_date'),
+#                 "duration": details.get('runtime'),
+#                 "ave_rate": 0.0,
+#                 "poster_path": details.get('poster_path'),
+#                 "backdrop_path": details.get('backdrop_path'),
+#                 "origin_country": details.get('origin_country'),
+#                 "summary": details.get('overview'),
+#                 "revenue": details.get('revenue'),
+#                 "budget": details.get('budget'),
+#                 "genres": [genre.get('name') for genre in details.get('genres')],
+#             })
+#             print(movie_id, f'{title} done')
+#             movie_id += 1
+#             json.dump(movie_list, f, indent=4)
 
 
 # def get_movie_synopsis(driver):
@@ -107,13 +106,13 @@ def get_movie_details(driver):
 
 
 # def get_movie_videos(driver):
-#     file = open('movie_list.json', 'r')
+#     file = open('movie_detail_with_director.json', 'r')
 #     data = json.load(file)
 #     videos = []
+#     movie_id = 0
 #     with open('movie_videos_list.json', 'w') as f:
 #         for movie in data:
-#             tmdb_id = list(movie.keys())[0]
-#             movie_id = movie["id"]
+#             tmdb_id = movie["imdb_id"]
 #             driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/videos?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
 #             details = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('results')
 
@@ -124,8 +123,42 @@ def get_movie_details(driver):
 #                     "key": video.get('key'),
 #                     "type": video.get('type')
 #                 })
-#             print(f'Page {movie_id} {movie[tmdb_id]} done')
+#             movie_id += 1
+#             print(f'{movie_id}. movie {movie["imdb_id"]} done')
 #         json.dump(videos, f, indent=4)
+
+
+# def add_director(driver):
+#     file = open('movie_details.json', 'r')
+#     data = json.load(file)
+#     file.close()
+#     count = 0
+#     rmv_data = []
+#     for movie in data:
+#         tmdb_id = movie['imdb_id']
+#         driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/credits?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+#         crew = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('crew')
+#         if not crew:
+#             rmv_data.append(movie)
+#             data.remove(movie)
+#             continue
+#         for c in crew:
+#             if c.get('job') == 'Director':
+#                 movie['director'] = c.get('name')
+#                 break
+#         if 'director' not in movie:
+#             rmv_data.append(movie)
+#             data.remove(movie)
+#             continue
+#         count += 1
+#         print(f'{count}. {movie["imdb_id"]} {movie["title"]} with \"{movie["director"]}\" done')
+#     print(len(rmv_data))
+#     with open('movie_detail_with_director.json', 'w') as f:
+#         json.dump(data, f, indent=4)
+#         f.close()
+#     with open('movie_detail_without_director.json', 'w') as f:
+#         json.dump(rmv_data, f, indent=4)
+#         f.close()
 
 
 def get_movie_images(driver, movie_id):
@@ -149,9 +182,35 @@ def get_movie_images(driver, movie_id):
             "type": "poster"
         })
 
+
+def get_director(driver):
+    file = open('movie_detail_without_director.json', 'r')
+    data = json.load(file)
+    count = 0
+    new_data = []
+    for movie in data:
+        tmdb_id = movie['imdb_id']
+        driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/credits?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+        crew = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('crew')
+        for c in crew:
+            if c.get('job') == 'Director':
+                id = c.get('id')
+                director = c.get('name')
+                new_data.append({
+                    id: director
+                })
+                break
+        count += 1
+        print(f'{count}. {movie["imdb_id"]} with \"{movie["director"]}\" done')
+    with open('director.json', 'w') as f:
+        json.dump(new_data, f, indent=4)
+
+
+
+
 def main():
     driver = webdriver.Chrome()
-    get_movie_details(driver)
+
     
 
 if __name__ == '__main__':

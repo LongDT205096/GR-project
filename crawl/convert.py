@@ -1,4 +1,6 @@
 import json
+import pprint as pp
+from iteration_utilities import duplicates
 
 
 def remove_duplicates():
@@ -78,8 +80,52 @@ def add_synopsis():
         json.dump(new_data, f, indent=4)
 
 
+def convert_to_director_id():
+    with open("movie_details.json", "r") as f:
+        data = json.load(f)
+        f.close()
+    with open("director.json", "r") as f:
+        directors = json.load(f)
+        f.close()
+    director_dict = {}
+    for director in directors:
+        item = list(director.values())
+        director_dict[item[1]] = item[0]
+
+    dup_list = ['Nick Gillespie', 'Tony Mitchell', 'Kim Hong-sun']
+    key_list = list(director_dict.keys())
+    val_list = list(director_dict.values())
+
+    err = []
+    for movie in data:
+        direc_name = movie["director"]
+        if direc_name in dup_list:
+            continue
+        else:
+            try:
+                position = val_list.index(direc_name)
+                movie["director_id"] = key_list[position]
+            except:
+                data.remove(movie)
+                err.append(movie)
+    with open("error.json", "w") as f:
+        json.dump(err, f, indent=4)
+    with open("movie_details.json", "w") as f:
+        json.dump(data, f, indent=4)
+
+
 def main():
-    add_synopsis()
+    with open("movie_details.json", "r") as f:
+        data = json.load(f)
+        f.close()
+    err = []
+    for movie in data:
+        if "director_id" not in movie.keys():
+            data.remove(movie)
+            err.append(movie)
+    
+    print(err)
+            
 
 if __name__ == "__main__":
     main()

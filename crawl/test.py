@@ -105,27 +105,29 @@ def export_to_json(data, file_name):
 #         json.dump(imdb_ids, f, indent=4)
 
 
-# def get_movie_videos(driver):
-#     file = open('movie_detail_with_director.json', 'r')
-#     data = json.load(file)
-#     videos = []
-#     movie_id = 0
-#     with open('movie_videos_list.json', 'w') as f:
-#         for movie in data:
-#             tmdb_id = movie["imdb_id"]
-#             driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/videos?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
-#             details = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('results')
+def get_movie_videos(driver):
+    file = open('movie_details.json', 'r')
+    data = json.load(file)
+    file.close()
 
-#             for video in details:
-#                 videos.append({
-#                     "movie_id": movie_id,
-#                     "name": video.get('name'),
-#                     "key": video.get('key'),
-#                     "type": video.get('type')
-#                 })
-#             movie_id += 1
-#             print(f'{movie_id}. movie {movie["imdb_id"]} done')
-#         json.dump(videos, f, indent=4)
+    videos = []
+    movie_id = 0
+    with open('movie_videos_list.json', 'w') as f:
+        for movie in data:
+            tmdb_id = movie["imdb_id"]
+            driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/videos?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+            details = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('results')
+
+            for video in details:
+                videos.append({
+                    "movie_id": movie_id,
+                    "name": video.get('name'),
+                    "key": video.get('key'),
+                    "type": video.get('type')
+                })
+            movie_id += 1
+            print(f'{movie_id}. movie {movie["imdb_id"]} done')
+        json.dump(videos, f, indent=4)
 
 
 # def add_director(driver):
@@ -249,7 +251,7 @@ def get_director_details(driver):
 
 def main():
     driver = webdriver.Chrome()
-    get_director_details(driver)
+    get_movie_videos(driver)
     
 
 if __name__ == '__main__':

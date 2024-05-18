@@ -36,7 +36,6 @@ const Login = () => {
             })
             .catch((err) => {
                 const error = JSON.parse(err.request.response);
-                console.log(error);
                 setMessage(error.detail);
                 setMessageType("danger");
             });

@@ -16,6 +16,7 @@ export const register = async (email: string, password: string, re_password: str
     return axios.post(auth_request.fetchRegister, body, config);
 }
 
+
 export const login = async (email: string, password: string) => {
     const config = {
         headers: {

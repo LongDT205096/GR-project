@@ -1,36 +1,25 @@
+from selenium import webdriver
+from selenium.webdriver.common.by import By
+from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support import expected_conditions as EC
+import pprint as pp
 import json
-import random
 
+from request import (
+    fetch_request,
+    genre_id
+)
 
-f = open("movie_list.json", "r")
-data = json.load(f)
-f.close()
-print(len(data))
-choice = random.sample(data, 1000)
-movie_id = [movie["id"]-1701 for movie in choice]
-movie_id = sorted(movie_id)
-movie_id.reverse()
+with open("movie_error.json", "r") as f:
+    data = json.load(f)
+    f.close()
+driver = webdriver.Chrome()
+for movie in data:
+    if "director" not in movie.keys():
+        data.remove(movie)
 
-movie_detail_id = [movie["id"] for movie in choice]
-movie_detail_id = sorted(movie_detail_id)
-movie_detail_id.reverse()
-
-with open("movie_list.json", "w") as f:
-    print(len(data))
-    for m_id in movie_id:
-        data.pop(m_id)
-    print(len(data))
+with open("movie_error.json", "w") as f:
     json.dump(data, f, indent=4)
 
-with open("movie_details_list.json", "r") as f:
-    data_details = json.load(f)
-    print(len(data_details))
-    f.close()
-
-with open("movie_details_list.json", "w") as f:
-    for m_id in movie_detail_id:
-        data_details.pop(m_id)
-    print(len(data_details))
-    json.dump(data_details, f, indent=4)
-
-
+        
+        

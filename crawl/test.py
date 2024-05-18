@@ -183,34 +183,73 @@ def get_movie_images(driver, movie_id):
         })
 
 
-def get_director(driver):
-    file = open('movie_detail_without_director.json', 'r')
+# def get_director(driver):
+#     file = open('movie_details.json', 'r')
+#     data = json.load(file)
+#     file.close()
+
+#     count = 0
+#     new_data = set()
+#     data_error = []
+#     for movie in data:
+#         tmdb_id = movie['imdb_id']
+#         driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/credits?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+#         crew = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('crew')
+#         for c in crew:
+#             if c["job"] == 'Director':
+#                 id = c["id"]
+#                 director = c["name"]
+#                 if director != movie['director']:
+#                     data_error.append({
+#                         'movie_id': tmdb_id,
+#                         'director': movie['director'],
+#                         'director_found': director,
+#                         'director_id': id
+#                     })
+#                     break
+#                 new_data.add(json.dumps({
+#                     id: director
+#                 }))
+#                 break
+#         count += 1
+#         print(f'{count}. {movie["imdb_id"]} with \"{movie["director"]}\" done')
+#     with open('director.json', 'w') as f:
+#         new_data = list(new_data)
+#         json.dump(new_data, f, indent=4)
+
+
+def get_director_details(driver):
+    file = open('director.json', 'r')
     data = json.load(file)
+    file.close()
+
     count = 0
-    new_data = []
-    for movie in data:
-        tmdb_id = movie['imdb_id']
-        driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/credits?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
-        crew = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('crew')
-        for c in crew:
-            if c.get('job') == 'Director':
-                id = c.get('id')
-                director = c.get('name')
-                new_data.append({
-                    id: director
-                })
-                break
-        count += 1
-        print(f'{count}. {movie["imdb_id"]} with \"{movie["director"]}\" done')
-    with open('director.json', 'w') as f:
-        json.dump(new_data, f, indent=4)
+    with open('director_details.json', 'w') as f:
+        for d in data:
+            director = json.loads(d)
+            for key in director.keys():
+                driver.get(f'{fetch_request["fetchPersonDetails"]}{key}?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+                details = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
 
+                info = {
+                    "imdb_id": key,
+                    "id": count,
+                    "name": director[key],
+                    "birthday": details.get('birthday'),
+                    "deathday": details.get('deathday'),
+                    "place_of_birth": details.get('place_of_birth'),
+                    "biography": details.get('biography'),
+                    "poster": details.get('profile_path'),
+                }
+                json.dump(info, f, indent=4)
+                print(f'{count}. {key} {director[key]} done')
+                count += 1
 
-
+    
 
 def main():
     driver = webdriver.Chrome()
-
+    get_director_details(driver)
     
 
 if __name__ == '__main__':

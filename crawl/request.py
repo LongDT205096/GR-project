@@ -5,6 +5,7 @@ fetch_request = {
     'fetchActionMovies': f'{BASE_URL}/discover/movie?api_key={API_KEY}&language=en-US&with_genres=28',
     'fetchComedyMovies': f'{BASE_URL}/discover/movie?api_key={API_KEY}&language=en-US&with_genres=35',
     'fetchMovieDetails': f'{BASE_URL}/movie/',
+    'fetchPersonDetails': f'{BASE_URL}/person/',
 }
 
 genre_id = {

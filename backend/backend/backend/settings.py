@@ -49,6 +49,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    "vote",
 
     #models
     'Apps.Account',
@@ -228,6 +229,17 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
     'openid',
 ]
 SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
+
+AWS_ACCESS_KEY_ID = os.environ.get("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = os.environ.get("AWS_SECRET_ACCESS_KEY")
+AWS_STORAGE_BUCKET_NAME = os.environ.get("AWS_STORAGE_BUCKET_NAME")
+AWS_S3_REGION_NAME = 'ap-southeast-2'
+AWS_S3_SIGNATURE_NAME = "s3v4"
+AWS_S3_FILE_OVERWRITE = False
+AWS_S3_VERITY = True
+AWS_DEFAULT_ACL = None
+DEFAULT_FILE_STORAGE = "storages.backends.s3boto3.S3Boto3Storage"
+
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/

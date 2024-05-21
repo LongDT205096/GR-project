@@ -7,7 +7,12 @@ class Director(models.Model):
     deathday = models.DateField(null=True, blank=True)
     place_of_birth = models.CharField(max_length=50)
     biography = models.TextField(null=True, blank=True)
-    poster = models.URLField(max_length=500, null=True, blank=True)
+    image = models.ImageField(upload_to="director/", blank=True, null=True)
 
     def __str__(self) -> str:
-        return f"{self.first_name} {self.last_name}"
+        return f"{self.name}"
+
+
+class DirectorImage(models.Model):
+    director = models.ForeignKey(Director, on_delete=models.CASCADE)
+    image = models.ImageField(upload_to="director/", blank=True, null=True)

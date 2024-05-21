@@ -25,7 +25,7 @@ urlpatterns = [
     # path('actor/', include('Apps.Actor.urls')),
     # path('director/', include('Apps.Director.urls')),
     # path('rate/', include('Apps.Rate.urls')),
-    # path('comment/', include('Apps.Comment.urls')),
+    # path('review/', include('Apps.Comment.urls')),
     # path('watchlist/', include('Apps.Watchlist.urls')),
     
 ]

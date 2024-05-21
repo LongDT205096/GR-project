@@ -2,15 +2,15 @@ from rest_framework.views import APIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 from rest_framework.response import Response
+from rest_framework import status
 
 from .models import Profile
 from .serializer import ProfileSerializer
-from ..Account.models import Account
-from ..Account.serializer import UserCreateSerializer
+
+
 # Create your views here.
 class ProfileView(APIView):
     serializer_class = ProfileSerializer
-    queryset = Profile.objects.all()
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
@@ -20,6 +20,7 @@ class ProfileView(APIView):
         serializer.data['account'] = serializer.get_account(profile)
 
         return Response(serializer.data)
+
 
 class ProfileUpdateView(APIView):
     def get(self, request):
@@ -34,5 +35,5 @@ class ProfileUpdateView(APIView):
             serializer.save()
             return Response(serializer.data)
 
-        return Response(serializer.errors)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 

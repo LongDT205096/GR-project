@@ -1,8 +1,8 @@
 from django.contrib import admin
-from .models import Movie, Genre, Trailer, Image
+from .models import Movie, Genre, MovieVideo, MovieImage
 
 # Register your models here.
 admin.site.register(Movie)
 admin.site.register(Genre)
-admin.site.register(Trailer)
-admin.site.register(Image)
+admin.site.register(MovieVideo)
+admin.site.register(MovieImage)

@@ -57,7 +57,7 @@ class Movie(models.Model):
         return self.title
 
 
-class Trailer(models.Model):
+class MovieVideo(models.Model):
     TYPE_CHOICES = [
         ("Trailers", "Trailers"),
         ("Teasers", "Teasers"),
@@ -71,13 +71,19 @@ class Trailer(models.Model):
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     title = models.CharField(max_length=50)
     link = models.FileField(null=True, blank=True)
-    type = models.CharField(max_length=50, choices=TYPE_CHOICES)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
 
     def __str__(self):
         return self.title
 
 
-class Image(models.Model):
+class MovieImage(models.Model):
+    TYPE_CHOICES = [
+        ("backdrops", "backdrops"),
+        ("posters", "posters"),
+        ("logos", "logos"),
+    ]
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
-    image = models.ImageField(null=True, blank=True)
+    image = models.ImageField(upload_to="movie/", null=True, blank=True)
+    type = models.CharField(max_length=20, choices=TYPE_CHOICES)
 

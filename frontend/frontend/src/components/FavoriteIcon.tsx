@@ -7,8 +7,6 @@ import { FaHeart } from "react-icons/fa";
 
 const FavoriteIcon = ({ favMovie }: { favMovie: string }) => {
     const movieId = favMovie;
-
-
     const [isFavorited, setIsFavorited] = useState(false);
 
     return (

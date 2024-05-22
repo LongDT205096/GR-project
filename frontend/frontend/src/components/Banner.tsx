@@ -117,7 +117,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
     }
 
     return (
-        <div className="relative">
+        <div className="relative text-lg">
             <div
                 key={bannerMovieDetails.id}
                 style={{
@@ -128,7 +128,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
                 }}
                 className={`bannerContainer sm:h-[100vh] h-full  sm:aspect-auto  aspect-square w-full relative overflow-x-hidden`}
             >
-                <div className="bannerTextContainer md:w-1/2 w-[75%] absolute md:top-1/4 top-1/3 bottom-2/4 left-[10%]">
+                <div className="bannerTextContainer md:w-1/2 w-[75%] absolute md:top-1/5 top-1/5 bottom-2/4 left-[10%]">
                     {bannerMovieDetails.images &&
                         bannerMovieDetails.images.logos &&
                         bannerMovieDetails.images.logos[0] &&
@@ -169,7 +169,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
                             </li>
                         </ul>
                     )}
-                    <p className="line-clamp-5 text-md md:text-sm hidden sm:block">
+                    <p className="line-clamp-5 text-base md:text-lg hidden sm:block ">
                         {bannerMovieDetails.overview}
                     </p>
                     <Link

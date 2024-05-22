@@ -1,12 +1,11 @@
 "use client";
-import React, { Suspense, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import useEmblaCarousel from "embla-carousel-react";
 import Autoplay from "embla-carousel-autoplay";
 import Image from "next/image";
 import Link from "next/link";
 
 const posterpath = "https://image.tmdb.org/t/p/w300";
-
 
 const SwipableSlider = ({ Categories }: { Categories: any[] }) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(

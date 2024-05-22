@@ -32,11 +32,10 @@ const Login = () => {
                 setMessageType("success");
                 localStorage.setItem("token", res.data.access);
                 router.refresh();
-                router.push("/myspace");
+                router.push("/myspace/overview");
             })
             .catch((err) => {
-                const error = JSON.parse(err.request.response);
-                setMessage(error.detail);
+                setMessage(err.data);
                 setMessageType("danger");
             });
     };

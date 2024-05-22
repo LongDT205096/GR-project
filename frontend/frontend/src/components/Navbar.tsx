@@ -1,10 +1,9 @@
 'use client'
 import Link from "next/link";
-import React, { use } from "react";
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import { BiHome, BiMoviePlay, BiSearchAlt, BiSolidLogOut, BiTv } from "react-icons/bi";
 import { FaTheaterMasks } from "react-icons/fa";
-import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 
 import { checkAuthenticated } from "@/actions/auth";
@@ -69,7 +68,7 @@ const Navbar = () => {
                     </Link>
 
                     <Link
-                        href={ user ? ("/myspace") : ("/login") }
+                        href={ user ? ("/myspace/overview") : ("/login") }
                         className="flex items-center link-container hover:text-white"
                     >   
                         <MySpaceIcon />

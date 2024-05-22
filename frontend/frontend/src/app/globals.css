@@ -130,3 +130,16 @@ h1 {
     -webkit-user-select: none;
   }
 }
+
+.tab-link {
+    position: relative;
+    padding-bottom: 8px;
+  }
+  
+.underline {
+    position: absolute;
+    bottom: 0;
+    height: 2px;
+    background-color: #14b8a6;
+    transition: left 0.3s ease, width 0.3s ease;
+}

@@ -1,5 +1,8 @@
 from django.db import models
+from django.db.models import Avg
 from django_countries.fields import CountryField
+
+from ..Rate.models import Rate
 
 
 class Genre(models.Model):
@@ -56,6 +59,8 @@ class Movie(models.Model):
     def __str__(self):
         return self.title
 
+    def average_rating(self) -> float:
+        return Rate.objects.filter(movie=self).aggregate(Avg('rate'))['rate__avg']
 
 class MovieVideo(models.Model):
     TYPE_CHOICES = [

@@ -4,8 +4,8 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from serializer import ReviewSerializer
-from models import Review
+from .serializer import ReviewSerializer
+from .models import Review
 
 
 # Create your views here.
@@ -27,17 +27,23 @@ class ReviewPersonal(APIView):
         serializer = ReviewSerializer(reviews, many=True)
         return Response(serializer.data)
 
-    def post(self, request):
-        serializer = ReviewSerializer(data=request.data)
+    def put(self, request):
+        user_review = Review.objects.filter(account=request.user, movie=request.data['movie'])
+        serializer = ReviewSerializer(user_review, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
 
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-    def put(self, request):
-        user_review = Review.objects.filter(account=request.user, movie=request.data['movie'])
-        serializer = ReviewSerializer(user_review, data=request.data)
+
+class ReviewCreate(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    
+    def post(self, request):
+        serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)

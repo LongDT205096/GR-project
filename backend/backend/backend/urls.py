@@ -24,8 +24,8 @@ urlpatterns = [
     path('movie/', include('Apps.Movie.urls')),
     # path('actor/', include('Apps.Actor.urls')),
     # path('director/', include('Apps.Director.urls')),
-    # path('rate/', include('Apps.Rate.urls')),
-    # path('review/', include('Apps.Comment.urls')),
+    path('movie/rate/', include('Apps.Rate.urls')),
+    path('movie/review/', include('Apps.Review.urls')),
     # path('watchlist/', include('Apps.Watchlist.urls')),
     
 ]

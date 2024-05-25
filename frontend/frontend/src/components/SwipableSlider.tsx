@@ -48,11 +48,12 @@ const SwipableSlider = ({ Categories }: { Categories: any[] }) => {
                                                 width={200}
                                                 height={200}
                                                 objectFit="cover"
-                                                className="cursor-pointer slide rounded-sm"
+                                                className="cursor-pointer slide rounded-md"
                                                 placeholder="blur"
                                                 blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM0dgn9DwADSwHNRhjk3gAAAABJRU5ErkJggg=="
                                                 unoptimized
                                             />
+                                            
                                         </Link>
                                     </div>
                                 )

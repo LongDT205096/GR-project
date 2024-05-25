@@ -1,25 +1,16 @@
 from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
-from selenium.webdriver.support import expected_conditions as EC
-import pprint as pp
-import json
+import boto3
 
-from request import (
-    fetch_request,
-    genre_id
-)
-
-with open("movie_error.json", "r") as f:
-    data = json.load(f)
-    f.close()
+url = "https://image.tmdb.org/t/p/w500/nDCN5WubZtnrUy5B1q67xde4wQI.jpg"
 driver = webdriver.Chrome()
-for movie in data:
-    if "director" not in movie.keys():
-        data.remove(movie)
+driver.get(url)
+with open("./media/movie/test.jpg", "wb") as f:
+    f.write(driver.find_element(By.XPATH, "/html/body/img").screenshot_as_png)
+    f.close()
 
-with open("movie_error.json", "w") as f:
-    json.dump(data, f, indent=4)
+driver.quit()
+with open("./media/movie/test.jpg", "rb") as f:
+    print(f.read())
+    f.close()
 
-        
-        

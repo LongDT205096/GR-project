@@ -39,7 +39,6 @@ function Latest({ params }: { params: { id: string } }) {
         fetchData();
     }, [params.id]);
 
-
     const handlePageChange = (newPage: string) => {
         setCurrentPage(Number(newPage));
         router.push(`/latest/page/${newPage}`);

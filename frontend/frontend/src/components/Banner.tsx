@@ -184,7 +184,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
             </div>
             {/* <div className="bannerOverlay absolute top-0 left-0 w-full h-full bg-black z-0"></div> */}
             <div className="posterContainer bannerSliderContainer absolute bottom-4 w-full flex-row sm:flex hidden justify-end">
-                <div className="w-2/4 overflow-x-hidden mx-5 gap-5">
+                <div className="w-[65%] overflow-x-hidden mx-5 gap-5">
                     <Slider
                         {...settings}
                         afterChange={(index) => handleBannerContent(index)}

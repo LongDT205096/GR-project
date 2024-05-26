@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 const posterpath = "https://image.tmdb.org/t/p/original";
 
-function Latest({ params }: { params: { castid: string } }) {
+function Latest({ params }: { params: { id: string } }) {
     const [resultMovie, setResultMovie] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -18,7 +18,7 @@ function Latest({ params }: { params: { castid: string } }) {
         async function fetchData() {
             try {
                 const response = await fetch(
-                    `${requests.fetchLatestMovies}&page=${params.castid}`,
+                    `${requests.fetchLatestMovies}&page=${params.id}`,
                     {
                         cache: "no-store",
                     }
@@ -37,7 +37,7 @@ function Latest({ params }: { params: { castid: string } }) {
             }
         }
         fetchData();
-    }, [params.castid]);
+    }, [params.id]);
 
     const handlePageChange = (newPage: string) => {
         setCurrentPage(Number(newPage));
@@ -83,7 +83,7 @@ function Latest({ params }: { params: { castid: string } }) {
                 ))}
             </div>
             <Pagination
-                currentPage={Number(params.castid)}
+                currentPage={Number(params.id)}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
             />

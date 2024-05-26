@@ -106,14 +106,16 @@ def export_to_json(data, file_name):
 
 
 def get_movie_videos(driver):
-    file = open('movie_details.json', 'r')
+    file = open('./data/movie_details.json', 'r')
     data = json.load(file)
     file.close()
 
     videos = []
-    movie_id = 0
-    with open('movie_videos_list.json', 'w') as f:
+    movie_id = 1
+    with open('./data/movie_videos_list.json', 'w') as f:
         for movie in data:
+            if movie_id == 101:
+                break
             tmdb_id = movie["imdb_id"]
             driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/videos?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
             details = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('results')
@@ -163,8 +165,9 @@ def get_movie_videos(driver):
 #         f.close()
 
 
-def get_movie_images(driver, movie_id):
+def get_movie_images(driver, movie_id, id):
     images = []
+
     driver.get(f'{fetch_request["fetchMovieDetails"]}{movie_id}/images?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
     data = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
     backdrops = data['backdrops']
@@ -172,6 +175,7 @@ def get_movie_images(driver, movie_id):
     logos = data['logos']
     for image in backdrops:
         images.append({
+            "id": id,
             "movie_id": movie_id,
             "backdrop_path": image['file_path'],
             "type": "backdrop"
@@ -179,11 +183,22 @@ def get_movie_images(driver, movie_id):
 
     for image in posters:
         images.append({
+            "id": id,
             "movie_id": movie_id,
             "poster_path": image['file_path'],
             "type": "poster"
         })
 
+    for image in logos:
+        images.append({
+            "id": id,
+            "movie_id": movie_id,
+            "logo_path": image['file_path'],
+            "type": "logo"
+        })
+
+    with open('./data/movie_images.json', 'a') as f:
+        json.dump(images, f, indent=4)
 
 # def get_director(driver):
 #     file = open('movie_details.json', 'r')

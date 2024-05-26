@@ -1,5 +1,5 @@
 import Banner from "@/components/Banner";
-import SwipableSlider from "@/components/SwipableSlider";
+import EmblaCarousel from "@/components/EmblaCarousel";
 // import SeriesSlider from "@/components/SeriesSlider";
 import UpcomingRelease from "@/components/UpcomingRelease";
 import requests from "@/utils/requests";
@@ -167,7 +167,7 @@ const Home = async () => {
                         </div>
                     </div>
                     <div>
-                        <SwipableSlider Categories={latestMoviesData} />
+                        <EmblaCarousel Categories={latestMoviesData} />
                     </div>
                 </div>
             </div>
@@ -181,7 +181,7 @@ const Home = async () => {
                             </Link>
                         </div>
                     </div>
-                    <SwipableSlider Categories={TopRated} />
+                    <EmblaCarousel Categories={TopRated} />
                 </div>
             </div>
             <div className="my-5 w-full ml-auto">

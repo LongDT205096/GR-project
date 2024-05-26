@@ -1,11 +1,12 @@
 'use client';
+import React from 'react';
 import Widget from '@/components/Widget';
 
 const Overview = () => {
     return (
-        <div>
+        <div className="container mx-auto my-5 p-5 text-lg">
             <Widget />
-            <h1>Hello</h1>
+            
         </div>
     );
 }

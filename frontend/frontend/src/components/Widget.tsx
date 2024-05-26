@@ -1,6 +1,7 @@
-'use client'
+'use client';
 import Link from 'next/link';
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef } from 'react';
+import { useRouter } from 'next/navigation';
 
 interface Tab {
     name: string;
@@ -8,6 +9,7 @@ interface Tab {
 }
 
 const Widget = () => {
+    const router = useRouter();
     const [selectedTab, setSelectedTab] = useState('Overview');
     const [underlineStyle, setUnderlineStyle] = useState<React.CSSProperties>({});
     const tabs: Tab[] = [
@@ -16,18 +18,32 @@ const Widget = () => {
         { name: 'Ratings', url: '/myspace/ratings' },
         { name: 'Watchlist', url: '/myspace/mywatchlist' }
     ];
-    const tabRefs = useRef<(HTMLAnchorElement | null)[]>([]);
+    const tabRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-    useEffect(() => {
-        const currentIndex = tabs.findIndex(tab => tab.name === selectedTab);
-        const currentTab = tabRefs.current[currentIndex];
+    useLayoutEffect(() => {
+        const currentTab = tabs.find(tab => tab.url === window.location.pathname);
         if (currentTab) {
+            setSelectedTab(currentTab.name);
+        }
+    }, [tabs]);
+
+    useLayoutEffect(() => {
+        const currentIndex = tabs.findIndex(tab => tab.name === selectedTab);
+        const currentTabElement = tabRefs.current[currentIndex];
+        if (currentTabElement) {
+            console.log(currentTabElement);
             setUnderlineStyle({
-                left: currentTab.offsetLeft,
-                width: currentTab.clientWidth
+                left: currentTabElement.offsetLeft,
+                width: currentTabElement.clientWidth,
+                transition: 'left 0.3s ease, width 0.3s ease'
             });
         }
     }, [selectedTab]);
+
+    const handleTabClick = (tab: Tab) => {
+        setSelectedTab(tab.name);
+        router.push(tab.url);
+    };
 
     return (
         <div>
@@ -49,18 +65,14 @@ const Widget = () => {
                 <div className="relative flex justify-center items-center border-b border-zinc-300 dark:border-zinc-700 pb-2">
                     <div className="flex space-x-4">
                         {tabs.map((tab, index) => (
-                            <Link
+                            <div
                                 key={tab.name}
-                                href={tab.url}
-                                ref={(el: HTMLAnchorElement | null) => {tabRefs.current[index] = el}}
-                                onClick={() => {
-                                    setSelectedTab(tab.name);
-                                }}
-                                className={`tab-link text-zinc-700 dark:text-zinc-300 hover:text-teal-500 ${selectedTab === tab.name ? 'active' : ''
-                                    }`}
+                                ref={(el) => { tabRefs.current[index] = el; }}
+                                onClick={() => handleTabClick(tab)}
+                                className={`tab-link cursor-pointer text-zinc-700 dark:text-zinc-300 hover:text-teal-500 ${selectedTab === tab.name ? 'active' : ''}`}
                             >
                                 {tab.name}
-                            </Link>
+                            </div>
                         ))}
                     </div>
                     <div className="underline" style={underlineStyle}></div>

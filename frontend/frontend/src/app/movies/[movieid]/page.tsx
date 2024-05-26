@@ -4,7 +4,7 @@ import Link from "next/link";
 
 import requests from "@/utils/requests";
 import CastCarousel from "@/components/Cast";
-import SwipableSlider from "@/components/SwipableSlider";
+import EmblaCarousel from "@/components/EmblaCarousel";
 // import OtherImageGallery from "@/components/OtherImageGallery";
 import FavoriteIcon from "@/components/FavoriteIcon";
 import Trailer from "@/components/Trailer";
@@ -44,7 +44,7 @@ async function getMovieCast(params: { movieid: string }) {
 
 async function getMovieImages(params: { movieid: string; }) {
     const OtherGalleryImages = await fetch(
-        `${requests.fetchMovieDetails}${params.movieid}/images?api_key=$e4d2477534d5a54cb6f0847a0ee853eb`,
+        `${requests.fetchMovieDetails}${params.movieid}/images?api_key=e4d2477534d5a54cb6f0847a0ee853eb`,
         {
             cache: "no-store",
         }
@@ -56,9 +56,9 @@ async function getMovieImages(params: { movieid: string; }) {
 
     return OtherGalleryImages.json();
 }
-async function getRecommendations(params: { movieid: any; }) {
+async function getRecommendations(params: { movieid: string; }) {
     const Recommendations = await fetch(
-        `${requests.fetchMovieDetails}${params.movieid}/recommendations?api_key=$e4d2477534d5a54cb6f0847a0ee853eb`,
+        `${requests.fetchMovieDetails}${params.movieid}/recommendations?api_key=e4d2477534d5a54cb6f0847a0ee853eb`,
         {
             cache: "no-store",
         }
@@ -70,9 +70,9 @@ async function getRecommendations(params: { movieid: any; }) {
 
     return Recommendations.json();
 }
-async function getSimilar(params: { movieid: any; }) {
+async function getSimilar(params: { movieid: string; }) {
     const similarMovies = await fetch(
-        `${requests.fetchMovieDetails}${params.movieid}/similar?api_key=$e4d2477534d5a54cb6f0847a0ee853eb`,
+        `${requests.fetchMovieDetails}${params.movieid}/similar?api_key=e4d2477534d5a54cb6f0847a0ee853eb`,
         {
             cache: "no-store",
         }
@@ -192,7 +192,7 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
                             <h1 className="text-2xl my-3">Movies You May Like</h1>
                         </div>
                     ) : null}
-                    <SwipableSlider Categories={similarmovie} />
+                    <EmblaCarousel Categories={similarmovie} />
                 </div>
             </div>
             <div className="latestReleases my-5 w-full ml-auto">
@@ -202,7 +202,7 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
                             <h1 className="text-2xl my-3">Recommended Movies</h1>
                         ) : null}
                     </div>
-                    <SwipableSlider Categories={recommendations} />
+                    <EmblaCarousel Categories={recommendations} />
                 </div>
             </div>
         </div>

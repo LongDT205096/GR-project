@@ -84,9 +84,9 @@ class MovieVideo(models.Model):
 
 class MovieImage(models.Model):
     TYPE_CHOICES = [
-        ("backdrops", "backdrops"),
-        ("posters", "posters"),
-        ("logos", "logos"),
+        ("backdrops", "backdrop"),
+        ("posters", "poster"),
+        ("logos", "logo"),
     ]
     movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
     image = models.ImageField(upload_to="movie/", null=True, blank=True)

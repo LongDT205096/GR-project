@@ -50,6 +50,17 @@ def add_movie_table(mydb, mycursor):
         count += 1
     
 
+def add_movie_image(mydb, mycursor):
+    with open('../data/movie_images.json', "r") as f:
+        datas = json.load(f)
+    for data in datas:
+        query = "INSERT INTO Movie_movieimage (movie_id, image, type) VALUES (%s, %s, %s)"
+        values = (data["id"], data["path"], data["type"])
+        mycursor.execute(query, values)
+        mydb.commit()
+
+
+
 def main():
     mydb = mysql.connector.connect(
     host="final-gr.cvu4iu82orkw.ap-southeast-2.rds.amazonaws.com",
@@ -60,6 +71,7 @@ def main():
     mycursor = mydb.cursor()
     add_director_table(mydb, mycursor)
     add_movie_table(mydb, mycursor)
+    add_movie_image(mydb, mycursor)
 
 if __name__ == "__main__":
     main()

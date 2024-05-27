@@ -1,7 +1,8 @@
 'use client';
 import Link from 'next/link';
-import React, { useState, useLayoutEffect, useRef } from 'react';
+import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
+import { getUser, updateUser } from '@/actions/auth';
 
 interface Tab {
     name: string;
@@ -45,12 +46,28 @@ const Widget = () => {
         router.push(tab.url);
     };
 
+    const [profile, setProfile] = useState(Object);
+    const [tempProfile, setTempProfile] = useState(Object);
+    const [isEditing, setEditing] = useState(false);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            const user = await getUser();
+            if (user) {
+                setProfile(user.data);
+            }
+        };
+        fetchData();
+    }, []);
+
+    
+
     return (
         <div>
-            <div className="bg-white p-3 border-t-4 border-green-400">
+            <div className="bg-zinc-200 border-t-4 border-green-400 pt-[2%] px-[5%]">
                 <div className="flex items-center space-x-4">
                     <div>
-                        <h1 className="text-zinc-700 text-2xl font-bold">helloworld!</h1>
+                        <h1 className="text-zinc-700 text-2xl font-bold">{ profile.first_name } { profile.last_name }</h1>
                         <p className="text-zinc-700">Member since March 2024</p>
                     </div>
                 </div>
@@ -61,15 +78,15 @@ const Widget = () => {
                     </div>
                 </div>
             </div>
-            <div className="bg-white dark:bg-zinc-800 p-4">
-                <div className="relative flex justify-center items-center border-b border-zinc-300 dark:border-zinc-700 pb-2">
+            <div className="bg-zinc-200 ">
+                <div className="relative flex justify-center items-center border-b border-zinc-300 dark:border-zinc-700">
                     <div className="flex space-x-4">
                         {tabs.map((tab, index) => (
                             <div
                                 key={tab.name}
                                 ref={(el) => { tabRefs.current[index] = el; }}
                                 onClick={() => handleTabClick(tab)}
-                                className={`tab-link cursor-pointer text-zinc-700 dark:text-zinc-300 hover:text-teal-500 ${selectedTab === tab.name ? 'active' : ''}`}
+                                className={`tab-link cursor-pointer text-zinc-800 hover:text-teal-500 ${selectedTab === tab.name ? 'active' : ''}`}
                             >
                                 {tab.name}
                             </div>

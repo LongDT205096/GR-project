@@ -2,11 +2,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from .models import Movie, Genre
+from .models import Movie, Genre, MovieImage, MovieVideo
 from .serializer import (
     GenreSerializer,
     MovieSerializer,
-    MovieGenreSerializer
+    MovieBannerSerializer
 )
 
 from ..Actor.models import Actor
@@ -37,5 +37,5 @@ class MovieByGenreView(APIView):
 
     def get(self, request, pk):
         movie = Movie.objects.all().filter(genres=pk)
-        serializer = MovieGenreSerializer(movie, many=True)
+        serializer = MovieBannerSerializer(movie, many=True)
         return Response(serializer.data)

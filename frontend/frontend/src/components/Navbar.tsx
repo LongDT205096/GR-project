@@ -27,15 +27,6 @@ const Navbar = () => {
 
     return (
         <div className="w-full sm:hover:w-48 sidebar flex flex-row sm:flex-col bg-gradient-to-l sm:from-transparent sm:to-neutral-950 text-slate-400 p-3 h-full from-neutral-950 to-neutral-950 rounded-t-2xl sm:rounded-t-none">
-            <div className="logo_container sm:block hidden h-[10%] flex-initial cursor-pointer">
-                <Image
-                    src="/assets/img/cinemovia_logo.png"
-                    alt="logo"
-                    width={75}
-                    height={75}
-                    unoptimized
-                />
-            </div>
             <div className="NavContainer w-full sm:w-auto flex items-center flex-[2_2_0%]">
                 <div className="NavLinks select-none w-full justify-start sm:justify-center flex flex-row sm:flex-col gap-5 overflow-x-scroll no-scrollbar">
                     <Link

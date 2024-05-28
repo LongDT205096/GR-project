@@ -6,7 +6,9 @@ from .models import Movie, Genre, MovieImage, MovieVideo
 from .serializer import (
     GenreSerializer,
     MovieSerializer,
-    MovieBannerSerializer
+    MovieBannerSerializer,
+    MovieImageSerializer,
+    MovieVideoSerializer
 )
 
 from ..Actor.models import Actor
@@ -23,9 +25,24 @@ class MovieDetailView(APIView):
         return Response(serializer.data)
 
 
+class MovieImageView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, pk):
+        movie = Movie.objects.get(pk=pk)
+        serializer = MovieImageSerializer(movie)
+        return Response(serializer.data)
+
+
+class MovieVideoView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, pk):
+        movie = Movie.objects.get(pk=pk)
+        serializer = MovieVideoSerializer(movie)
+        return Response(serializer.data)
+    
+
 class GenreListView(APIView):
     permission_classes = [AllowAny]
-
     def get(self, request):
         genres = Genre.objects.all()
         serializer = GenreSerializer(genres, many=True)
@@ -34,7 +51,6 @@ class GenreListView(APIView):
 
 class MovieByGenreView(APIView):
     permission_classes = [AllowAny]
-
     def get(self, request, pk):
         movie = Movie.objects.all().filter(genres=pk)
         serializer = MovieBannerSerializer(movie, many=True)

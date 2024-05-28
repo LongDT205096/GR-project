@@ -3,21 +3,21 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { AiOutlineHeart } from "react-icons/ai";
-import { FaHeart } from "react-icons/fa";
+import { FaList } from "react-icons/fa";
 
-const FavoriteIcon = ({ favMovie }: { favMovie: string }) => {
+const WatchlistIcon = ({ favMovie }: { favMovie: string }) => {
     const movieId = favMovie;
     const [isFavorited, setIsFavorited] = useState(false);
 
     return (
         <div>
             {isFavorited ? (
-                <FaHeart
+                <FaList
                     className="text-red-600 my-auto rounded-full cursor-pointer"
                     // onClick={handleRemoveFavorite}
                 />
             ) : (
-                <FaHeart
+                <FaList
                     className="text-white my-auto cursor-pointer"
                     // onClick={handleFavoriteClick}
                 />
@@ -26,4 +26,4 @@ const FavoriteIcon = ({ favMovie }: { favMovie: string }) => {
     );
 };
 
-export default FavoriteIcon;
+export default WatchlistIcon;

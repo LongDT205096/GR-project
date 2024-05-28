@@ -10,8 +10,6 @@ class MovieSerializer(serializers.ModelSerializer):
     genres = serializers.SerializerMethodField()
     director = serializers.SerializerMethodField()
     reviews = serializers.SerializerMethodField()
-    images = serializers.SerializerMethodField()
-    videos = serializers.SerializerMethodField()
 
     def get_actors(self, obj):
         actors = Actor.objects.filter(movie=obj)
@@ -39,23 +37,6 @@ class MovieSerializer(serializers.ModelSerializer):
         director = Director.objects.get(movie=obj)
         return {"id": director.id, "name": director.name}
 
-    def get_images(self, obj):
-        images = MovieImage.objects.filter(movie=obj)
-        return [{
-            "id": image.id,
-            "image": image.image.url,
-            "type": image.type
-        } for image in images]
-
-    def get_videos(self, obj):
-        videos = MovieVideo.objects.filter(movie=obj)
-        return [{
-            "id": video.id,
-            "title": video.title,
-            "link": video.link.url,
-            "type": video.type
-        } for video in videos]
-
     class Meta:
         model = Movie
         fields = '__all__'
@@ -71,3 +52,58 @@ class GenreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Genre
         fields = '__all__'
+
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieImage
+        fields = '__all__'
+
+
+class MovieImageSerializer(serializers.Serializer):
+    Backdrops = serializers.ListField(child=ImageSerializer())
+    Posters = serializers.ListField(child=ImageSerializer())
+    Logos = serializers.ListField(child=ImageSerializer())
+
+    def to_representation(self, obj):
+        images = MovieImage.objects.filter(movie=obj)
+        backdrops = images.filter(type='backdrop')
+        posters = images.filter(type='poster')
+        logos = images.filter(type='logo')
+
+        return {
+            'backdrops': ImageSerializer(backdrops, many=True).data,
+            'posters': ImageSerializer(posters, many=True).data,
+            'logos': ImageSerializer(logos, many=True).data
+        }
+
+
+class VideoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MovieVideo
+        fields = '__all__'
+
+
+class MovieVideoSerializer(serializers.Serializer):
+    Trailer = serializers.ListField(child=VideoSerializer())
+    Teaser = serializers.ListField(child=VideoSerializer())
+
+    def to_representation(self, obj):
+        videos = MovieVideo.objects.filter(movie=obj)
+        trailer = videos.filter(type='Trailer')
+        teaser = videos.filter(type='Teaser')
+        clips = videos.filter(type='Clips')
+        behind_the_scene = videos.filter(type='Behind the Scene')
+        bloopers = videos.filter(type='Bloopers')
+        featurettes = videos.filter(type='Featurettes')
+        opening_credits = videos.filter(type='Opening Credits')
+
+        return {
+            'trailer': VideoSerializer(trailer, many=True).data,
+            'teaser': VideoSerializer(teaser, many=True).data,
+            'clips': VideoSerializer(clips, many=True).data,
+            'behind the Scene': VideoSerializer(behind_the_scene, many=True).data,
+            'bloopers': VideoSerializer(bloopers, many=True).data,
+            'featurettes': VideoSerializer(featurettes, many=True).data,
+            'opening Credits': VideoSerializer(opening_credits, many=True).data
+        }

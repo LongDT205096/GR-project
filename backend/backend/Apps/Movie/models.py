@@ -60,7 +60,10 @@ class Movie(models.Model):
         return self.title
 
     def average_rating(self) -> float:
-        return Rate.objects.filter(movie=self).aggregate(Avg('rate'))['rate__avg']
+        rate = Rate.objects.filter(movie=self).aggregate(Avg('rate'))['rate__avg']
+        if rate is None:
+            return 0.0
+        return rate
 
 class MovieVideo(models.Model):
     TYPE_CHOICES = [

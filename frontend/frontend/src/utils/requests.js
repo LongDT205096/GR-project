@@ -11,7 +11,7 @@ const requests = {
   fetchRomanceMovies: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=10749`,
   fetchDocumentaries: `${BASE_URL}/discover/movie?api_key=${API_KEY}&language=en-US&with_genres=99`,
   fetchSeriesDetails: `${BASE_URL}/tv/`,
-  fetchMovieDetails: `${BASE_URL}/movie/`,
+  fetchMovieDetails: "/movie/details/",
   fetchLatestTvSeries: `${BASE_URL}/discover/tv?api_key=${API_KEY}`,
   fetchPerson: `${BASE_URL}/person/`,
   fetchOttTv: `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_networks=`,

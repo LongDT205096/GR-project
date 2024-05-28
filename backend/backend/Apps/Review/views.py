@@ -11,7 +11,6 @@ from .models import Review
 # Create your views here.
 class ReviewListView(APIView):
     permission_classes = [AllowAny]
-
     def get(self, request, pk):
         reviews = Review.objects.all().filter(movie=pk)
         serializer = ReviewSerializer(reviews, many=True)
@@ -41,7 +40,6 @@ class ReviewCreate(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
-    
     def post(self, request):
         serializer = ReviewSerializer(data=request.data)
         if serializer.is_valid():

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useState } from "react";
 import axios from 'axios';
+import { FaPlay } from "react-icons/fa";
 import requests from "@/utils/requests";
 import Loader from "./Loader";
 import Popups from "./Popups";
@@ -25,7 +26,6 @@ const Trailer = ({ movieId }: { movieId: string }) => {
             try {
                 const video = await getMovieVideo(movieId);
                 if (video.trailer[0] != "") {
-                    console.log(video.trailer[0].link);
                     setVideo(video.trailer[0].link);
                 } else {
                     setVideo("");
@@ -42,10 +42,9 @@ const Trailer = ({ movieId }: { movieId: string }) => {
         <div>
             <button
                 popup-btn-1="true"
-                className={`py-2 px-5 bg-white/30 my-3 text-sm backdrop-blur ${trailervideo == null ? "hidden" : ""
-                    } hover:bg-white/20 cursor-pointer text-white`}
-            >
-                Watch Trailer
+                className={`flex items-center justify-center rounded-full bg-black px-4 py-3 ${trailervideo == null ? "hidden" : ""
+                    } hover:bg-white/20 cursor-pointer text-white`}><FaPlay className="mr-2"></FaPlay>
+                    Watch Trailer
             </button>
 
             <Popups targetItem="1">

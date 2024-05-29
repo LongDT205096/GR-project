@@ -1,5 +1,5 @@
 import BigTextContent from "@/components/BigTextContent";
-import SwipableSlider from "@/components/SwipableSlider";
+import EmblaCarousel from "@/components/EmblaCarousel";
 import requests from "@/utils/requests";
 import Image from "next/image";
 
@@ -70,17 +70,17 @@ const Cast = async ({ params }: any) => {
                         <h1 className="font-bold mt-3 text-xl text-center">
                             {persondetails.name}
                         </h1>
-                        <p className="font-italic text-slate-300 text-center text-sm">
+                        <p className="font-italic text-slate-300 text-center text-lg">
                             Known For:{" " + persondetails.known_for_department}
                         </p>
                     </div>
                 </div>
                 <div className="flex-1 h-full my-auto mr-32 md:p-10 px-2 flex items-center justify-center">
-                    <div className="person_details_container md:p-0 p-3">
+                    <div className="person_details_container md:p-0 p-3 text-lg">
                         <p>
                             {" "}
                             {persondetails.birthday != null ? (
-                                <span className="font-bold">Date Of Birth:</span>
+                                <span className="font-bold">Date Of Birth: </span>
                             ) : (
                                 ""
                             )}
@@ -89,7 +89,7 @@ const Cast = async ({ params }: any) => {
                         <p>
                             {" "}
                             {persondetails.place_of_birth != null ? (
-                                <span className="font-bold">Place Of Birth:</span>
+                                <span className="font-bold">Place Of Birth: </span>
                             ) : (
                                 ""
                             )}
@@ -97,7 +97,6 @@ const Cast = async ({ params }: any) => {
                         </p>
 
                         <BigTextContent
-
                             textData={persondetails.biography}
                         />
                     </div>
@@ -107,13 +106,13 @@ const Cast = async ({ params }: any) => {
             <div className="w-100 my-3">
                 <div className="md:w-[80%] w-[95%] mx-auto">
                     <div className="heading">
-                        <h1 className="text-2xl my-3">Castings</h1>
+                        <h1 className="text-2xl my-3">Known for</h1>
                     </div>
                     <div className="latestReleases my-5 w-full ml-auto">
                         <div className="ml-0 latestinner h-full overflow-hidden">
                             {personMovieCall.cast && (<div className="heading">
                             </div>)}
-                            {(<SwipableSlider Categories={personMovieCall.cast} />)}
+                            {(<EmblaCarousel Categories={personMovieCall.cast} />)}
                         </div>
                     </div>
 

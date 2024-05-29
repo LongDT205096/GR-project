@@ -86,9 +86,8 @@ export const checkAuthenticated = () => {
 }
 
 
-export const getUser = async () => {
+export const getProfile = () => {
     const token = localStorage.getItem('token');
-
     if(token) {
         const config = {
             headers: {
@@ -103,7 +102,7 @@ export const getUser = async () => {
 };
 
 
-export function updateUser(data: any) {
+export function updateProfile(data: any) {
     const token = localStorage.getItem('token');
     const config = {
         headers: {
@@ -112,6 +111,5 @@ export function updateUser(data: any) {
             'Accept': 'application/json'
         }
     }
-
     axios.put(profile_request.fetchUpdateProfile, data, config)
 }

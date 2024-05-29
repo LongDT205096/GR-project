@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getUser, updateUser } from '@/actions/auth';
+import { getProfile, updateUser } from '@/actions/auth';
 
 interface Tab {
     name: string;
@@ -32,7 +32,6 @@ const Widget = () => {
         const currentIndex = tabs.findIndex(tab => tab.name === selectedTab);
         const currentTabElement = tabRefs.current[currentIndex];
         if (currentTabElement) {
-            console.log(currentTabElement);
             setUnderlineStyle({
                 left: currentTabElement.offsetLeft,
                 width: currentTabElement.clientWidth,
@@ -47,14 +46,12 @@ const Widget = () => {
     };
 
     const [profile, setProfile] = useState(Object);
-    const [tempProfile, setTempProfile] = useState(Object);
-    const [isEditing, setEditing] = useState(false);
 
     useEffect(() => {
         const fetchData = async () => {
-            const user = await getUser();
-            if (user) {
-                setProfile(user.data);
+            const profile = await getProfile();
+            if (profile) {
+                setProfile(profile.data);
             }
         };
         fetchData();

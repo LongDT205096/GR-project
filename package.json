@@ -1,0 +1,5 @@
+{
+  "devDependencies": {
+    "@types/react-select-country-list": "^2.2.3"
+  }
+}

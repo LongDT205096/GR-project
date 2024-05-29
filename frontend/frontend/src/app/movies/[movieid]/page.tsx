@@ -10,8 +10,7 @@ import EmblaCarousel from "@/components/EmblaCarousel";
 import WatchlistIcon from "@/components/WatchlistIcon";
 import Trailer from "@/components/Trailer";
 import Review from "@/components/Review";
-
-
+import Rate from "@/components/Rate";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 const bannerpath = "https://image.tmdb.org/t/p/original/";
@@ -143,13 +142,13 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
                             <li className="list-disc">{movieDataAll.release_date}</li>
                             <li className="list-disc">{movieDataAll.original_country}</li>
                         </ul>
-                        <ul className="flex gap-5 text-slate-300 sm:justify-start justify-center my-2">
-                            <li className="flex items-center text-slate-300 font-bold md:justify-start justify-center">
-                                <span className="material-icons p-3">star</span>
+                        <ul className="flex gap-5 text-slate-300 sm:justify-start justify-center my-4">
+                            <li className="text-2xl flex items-center text-slate-300 font-bold md:justify-start justify-center">
+                                <span className="material-icons pr-3">star</span>
                                 {movieDataAll.ave_rate.toFixed(1) + "/ " + "10.0"}
                             </li>
-                            <li className="flex items-center justify-center rounded-full bg-black p-4">
-                                
+                            <li>
+                                <Rate movieId={movieDataAll.id} movieTitle={movieDataAll.title} />
                             </li>
                         </ul>
                         <ul className="flex gap-5 text-slate-300 sm:justify-start justify-center my-2">
@@ -159,16 +158,26 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
                             <li className="flex items-center justify-center rounded-full bg-black p-4">
                                 <WatchlistIcon favMovie={movieDataAll.id} />
                             </li>
+                            <li>
+                                <Trailer movieId={movieDataAll.id} />
+                            </li>
                         </ul>
-                        <p className="font-light my-2 md:w-2/3 w-[95%] px-4 md:mx-0 mx-auto">{movieDataAll.summary}</p>
-                        <Trailer movieId={movieDataAll.id} />
+                        <div>
+                            <h1 className="text-2xl">Summary</h1>
+                            <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">{movieDataAll.summary}</p>
+                        </div>
+                        <div className="mt-4">
+                            <h1 className="text-2xl">{movieDataAll.director.name}</h1>
+                            <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">
+                                Director
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
 
             <div className="h-screen flex">
                 <div className="w-3/4 mr-[10%] flex justify-end">
-
 
                     {/* <div className="castSection">
                     <CastCarousel Cast={MovieCast.cast} />

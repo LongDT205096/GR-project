@@ -16,7 +16,7 @@ from ..Director.models import Director
 
 
 class MovieDetailView(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = [AllowAny]
 
     def get(self, request, pk):
         movie = Movie.objects.get(pk=pk)

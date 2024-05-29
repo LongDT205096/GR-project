@@ -71,7 +71,7 @@ const EmblaCarousel = ({ Categories }: { Categories: any[] }) => {
                             )}
                     </div>
                 </div>
-                <div className="items-center justify-center flex mt-8">
+                <div className="items-center justify-evenly flex mt-8">
                     <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
                     <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
                 </div>

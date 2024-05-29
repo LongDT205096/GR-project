@@ -1,4 +1,4 @@
-const base = '/profile/';
+const base = 'account/profile/';
 
 const profile_request = {
     fetchProfile: base + 'view/',

@@ -1,18 +1,23 @@
 'use client';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useMemo } from 'react';
+import Select from 'react-select';
+import countryList from 'react-select-country-list';
+
 import Widget from '@/components/Widget';
-import { getUser, updateUser } from '@/actions/auth';
+import { getProfile, updateProfile } from '@/actions/auth';
 
 const Overview = () => {
     const [profile, setProfile] = useState(Object);
     const [tempProfile, setTempProfile] = useState(Object);
     const [isEditing, setEditing] = useState(false);
+    const [selectedCountry, setSelectedCountry] = useState('');
 
     useEffect(() => {
         const fetchData = async () => {
-            const user = await getUser();
-            if (user) {
-                setProfile(user.data);
+            const profile = await getProfile();
+            if (profile) {
+                setProfile(profile.data);
+                setSelectedCountry(profile.data.country);
             }
         };
         fetchData();
@@ -34,10 +39,24 @@ const Overview = () => {
         });
     };
 
+    const options = useMemo(() => countryList().getData(), [])
+    const handleCountry = (e: any) => {
+        setSelectedCountry(e.value);
+        setProfile({
+            ...profile,
+            "country": e.value
+        });
+        setTempProfile({
+            ...tempProfile,
+            "country": e.label
+        });
+    }
+
     const handleSave = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         setEditing(false);
-        updateUser(profile);
+        setProfile({ ...tempProfile  });
+        updateProfile(profile);
     }
 
     const handleCancel = (e: { preventDefault: () => void; }) => {
@@ -75,6 +94,7 @@ const Overview = () => {
                                     <div className="px-4 py-2">{profile.first_name}</div>
                                 )}
                             </div>
+
                             <div className="grid grid-cols-2">
                                 <div className="px-4 py-2 font-semibold">Last Name</div>
                                 {isEditing ? (
@@ -87,29 +107,33 @@ const Overview = () => {
                                     <div className="px-4 py-2">{profile.last_name}</div>
                                 )}
                             </div>
-                            <div className="grid grid-cols-2">
-                                <div className="px-4 py-2 font-semibold">Contact No.</div>
-                                <div className="px-4 py-2">???</div>
-                            </div>
-                            <div className="grid grid-cols-2">
-                                <div className="px-4 py-2 font-semibold">Country</div>
-                                <div className="px-4 py-2">{profile.country}</div>
-                            </div>
+
                             <div className="grid grid-cols-2">
                                 <div className="px-4 py-2 font-semibold">Email</div>
                                 <div className="px-4 py-2">{profile.account}</div>
                             </div>
+
                             <div className="grid grid-cols-2">
                                 <div className="px-4 py-2 font-semibold">Birthday</div>
                                 <div className="px-4 py-2">{profile.birthday}</div>
                             </div>
+
+                            <div className="grid grid-cols-2">
+                                <div className="px-4 py-2 font-semibold">Country</div>
+                                {isEditing ? (
+                                    <Select options={options} value={selectedCountry} onChange={(e) => handleCountry(e)} />
+                                ) : (
+                                    <div className="px-4 py-2">{profile.country}</div>
+                                )}
+                            </div>
                         </div>
+
                         {isEditing ?
                             (<div>
                                 <button onClick={handleSave}
                                     className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Save</button>
                                 <button onClick={handleCancel}
-                                    className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Cancle</button>
+                                    className="block w-full text-blue-800 text-sm font-semibold rounded-lg hover:bg-gray-100 focus:outline-none focus:shadow-outline focus:bg-gray-100 hover:shadow-xs p-3 my-4">Cancel</button>
                             </div>)
                             :
                             (<button onClick={onClick}

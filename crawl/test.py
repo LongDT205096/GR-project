@@ -10,12 +10,6 @@ from request import (
     genre_id
 )
 
-
-def export_to_json(data, file_name):
-    with open(file_name, 'a') as f:
-        json.dump(data, f, indent=4)
-
-
 # def get_movie_list(driver):
 #     movies = []
 #     with open('movie_list.json', 'a') as f:
@@ -105,31 +99,31 @@ def export_to_json(data, file_name):
 #         json.dump(imdb_ids, f, indent=4)
 
 
-def get_movie_videos(driver):
-    file = open('./data/movie_details.json', 'r')
-    data = json.load(file)
-    file.close()
+# def get_movie_videos(driver):
+#     file = open('./data/movie_details.json', 'r')
+#     data = json.load(file)
+#     file.close()
 
-    videos = []
-    movie_id = 1
-    with open('./data/movie_videos_list.json', 'w') as f:
-        for movie in data:
-            if movie_id == 101:
-                break
-            tmdb_id = movie["imdb_id"]
-            driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/videos?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
-            details = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('results')
+#     videos = []
+#     movie_id = 1
+#     with open('./data/movie_videos_list.json', 'w') as f:
+#         for movie in data:
+#             if movie_id == 101:
+#                 break
+#             tmdb_id = movie["imdb_id"]
+#             driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/videos?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+#             details = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('results')
 
-            for video in details:
-                videos.append({
-                    "movie_id": movie_id,
-                    "name": video.get('name'),
-                    "key": video.get('key'),
-                    "type": video.get('type')
-                })
-            movie_id += 1
-            print(f'{movie_id}. movie {movie["imdb_id"]} done')
-        json.dump(videos, f, indent=4)
+#             for video in details:
+#                 videos.append({
+#                     "movie_id": movie_id,
+#                     "name": video.get('name'),
+#                     "key": video.get('key'),
+#                     "type": video.get('type')
+#                 })
+#             movie_id += 1
+#             print(f'{movie_id}. movie {movie["imdb_id"]} done')
+#         json.dump(videos, f, indent=4)
 
 
 # def add_director(driver):
@@ -165,49 +159,49 @@ def get_movie_videos(driver):
 #         f.close()
 
 
-def get_movie_images(driver):
-    images = []
-    with open('./data/movie_details.json', 'r') as f:
-        datas = json.load(f)
-        f.close()
-    count = 0
+# def get_movie_images(driver):
+#     images = []
+#     with open('./data/movie_details.json', 'r') as f:
+#         datas = json.load(f)
+#         f.close()
+#     count = 0
 
-    for data in datas:
-        if count == 101:
-            break
-        count += 1
-        movie_id = data["imdb_id"]
-        driver.get(f'{fetch_request["fetchMovieDetails"]}{movie_id}/images?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
-        data = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
-        backdrops = data['backdrops']
-        posters = data['posters']
-        logos = data['logos']
-        for image in backdrops:
-            images.append({
-                "id": count,
-                "movie_id": movie_id,
-                "path": image['file_path'],
-                "type": "backdrop"
-            })
+#     for data in datas:
+#         if count == 101:
+#             break
+#         count += 1
+#         movie_id = data["imdb_id"]
+#         driver.get(f'{fetch_request["fetchMovieDetails"]}{movie_id}/images?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+#         data = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
+#         backdrops = data['backdrops']
+#         posters = data['posters']
+#         logos = data['logos']
+#         for image in backdrops:
+#             images.append({
+#                 "id": count,
+#                 "movie_id": movie_id,
+#                 "path": image['file_path'],
+#                 "type": "backdrop"
+#             })
 
-        for image in posters:
-            images.append({
-                "id": count,
-                "movie_id": movie_id,
-                "path": image['file_path'],
-                "type": "poster"
-            })
+#         for image in posters:
+#             images.append({
+#                 "id": count,
+#                 "movie_id": movie_id,
+#                 "path": image['file_path'],
+#                 "type": "poster"
+#             })
 
-        for image in logos:
-            images.append({
-                "id": count,
-                "movie_id": movie_id,
-                "path": image['file_path'],
-                "type": "logo"
-            })
+#         for image in logos:
+#             images.append({
+#                 "id": count,
+#                 "movie_id": movie_id,
+#                 "path": image['file_path'],
+#                 "type": "logo"
+#             })
         
-    with open('./data/movie_images.json', 'w') as f:
-        json.dump(images, f, indent=4)
+#     with open('./data/movie_images.json', 'w') as f:
+#         json.dump(images, f, indent=4)
 
 # def get_director(driver):
 #     file = open('movie_details.json', 'r')
@@ -244,38 +238,109 @@ def get_movie_images(driver):
 #         json.dump(new_data, f, indent=4)
 
 
-def get_director_details(driver):
-    file = open('director.json', 'r')
+# def get_director_details(driver):
+#     file = open('director.json', 'r')
+#     data = json.load(file)
+#     file.close()
+
+#     count = 0
+#     with open('director_details.json', 'w') as f:
+#         for d in data:
+#             director = json.loads(d)
+#             for key in director.keys():
+#                 driver.get(f'{fetch_request["fetchPersonDetails"]}{key}?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+#                 details = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
+
+#                 info = {
+#                     "imdb_id": key,
+#                     "id": count,
+#                     "name": director[key],
+#                     "birthday": details.get('birthday'),
+#                     "deathday": details.get('deathday'),
+#                     "place_of_birth": details.get('place_of_birth'),
+#                     "biography": details.get('biography'),
+#                     "poster": details.get('profile_path'),
+#                 }
+#                 json.dump(info, f, indent=4)
+#                 print(f'{count}. {key} {director[key]} done')
+#                 count += 1
+
+
+# def get_movie_crew_list(driver):
+#     file = open('./data/movie_details.json', 'r')
+#     data = json.load(file)
+#     file.close()
+
+#     count = 1
+#     movie_list = {}
+#     with open('./data/actor_list.json', 'w') as f:
+#         for movie in data:
+#             actor_list = []
+#             if count == 101:
+#                 break
+#             tmdb_id = movie['imdb_id']
+#             driver.get(f'{fetch_request["fetchMovieDetails"]}{tmdb_id}/credits?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
+#             cast = json.loads(driver.find_element(By.TAG_NAME, 'body').text).get('cast')
+#             for actor in cast:
+#                 actor_info = {
+#                     "movie_id": count,
+#                     "actor_id": actor.get('id'),
+#                     "actor_name": actor.get('name'),
+#                     "character": actor.get('character'),
+#                 }
+#                 actor_list.append(actor_info)
+#             movie_list[movie["title"]] = actor_list
+#             print(f'{count}. {movie.get("title")} done')
+#             count += 1
+#         json.dump(movie_list, f, indent=4)
+    
+
+# def get_actor_list(driver):
+#     file = open('./data/movie_crew_list.json', 'r')
+#     data = json.load(file)
+#     file.close()
+#     movie_list = list(data.keys())
+#     actor_set = set()
+#     for movie in movie_list:
+#         actor_list = data[movie]
+#         for actor in actor_list:
+#             actor_set.add(json.dumps({
+#                 "actor_id": actor['actor_id'],
+#                 "actor_name": actor['actor_name']
+#             }))
+#     with open('./data/actor_list.json', 'w') as f:
+#         json.dump(list(actor_set), f, indent=4)
+
+
+def get_actor_details(driver):
+    file = open('./data/actor_list.json', 'r')
     data = json.load(file)
     file.close()
 
-    count = 0
-    with open('director_details.json', 'w') as f:
-        for d in data:
-            director = json.loads(d)
-            for key in director.keys():
-                driver.get(f'{fetch_request["fetchPersonDetails"]}{key}?api_key=e4d2477534d5a54cb6f0847a0ee853eb')
-                details = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
-
-                info = {
-                    "imdb_id": key,
-                    "id": count,
-                    "name": director[key],
-                    "birthday": details.get('birthday'),
-                    "deathday": details.get('deathday'),
-                    "place_of_birth": details.get('place_of_birth'),
-                    "biography": details.get('biography'),
-                    "poster": details.get('profile_path'),
-                }
-                json.dump(info, f, indent=4)
-                print(f'{count}. {key} {director[key]} done')
-                count += 1
-
-    
+    actor_List = []
+    count = 1
+    for d in data:
+        d = json.loads(d)
+        actor_id = d["actor_id"]
+        request = f'{fetch_request["fetchPersonDetails"]}{actor_id}?api_key=e4d2477534d5a54cb6f0847a0ee853eb'
+        driver.get(request)
+        details = json.loads(driver.find_element(By.TAG_NAME, 'body').text)
+        actor_List.append({
+            "id": count,
+            "name": details["name"],
+            "birthday": details.get('birthday'),
+            "deathday": details.get('deathday'),
+            "place_of_birth": details.get('place_of_birth'),
+            "biography": details.get('biography'),
+        })
+        print(f'{count}. {details["name"]} done')
+        count += 1
+    with open('./data/actor_details.json', 'w') as f:
+        json.dump(actor_List, f, indent=4)
 
 def main():
     driver = webdriver.Chrome()
-    get_movie_images(driver)
+    get_actor_details(driver)
     
 
 if __name__ == '__main__':

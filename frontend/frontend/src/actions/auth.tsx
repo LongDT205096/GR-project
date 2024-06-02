@@ -111,5 +111,5 @@ export function updateProfile(data: any) {
             'Accept': 'application/json'
         }
     }
-    axios.put(profile_request.fetchUpdateProfile, data, config)
+    return axios.put(profile_request.fetchUpdateProfile, data, config)
 }

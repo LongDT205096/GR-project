@@ -5,7 +5,6 @@ from ..Account.models import Account
 
 class ProfileSerializer(serializers.ModelSerializer):
     account = serializers.SerializerMethodField()
-    country = serializers.SerializerMethodField()
 
     class Meta:
         model = Profile
@@ -14,8 +13,6 @@ class ProfileSerializer(serializers.ModelSerializer):
     def get_account(self, obj):
         return Account.objects.get(pk=obj.account.id).__str__()
 
-    def get_country(self, obj):
-        return obj.get_country()
 
 class ProfileUpdateSerializer(serializers.ModelSerializer):
     class Meta:

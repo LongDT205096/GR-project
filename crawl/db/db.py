@@ -69,6 +69,27 @@ def add_movie_video(mydb, mycursor):
         mycursor.execute(query, values)
         mydb.commit()
 
+
+class Actor:
+    def __init__(self, name, place_of_birth, biography, birthday, deathday):
+        self.name = name
+        self.place_of_birth = place_of_birth
+        self.biography = biography
+        self.birthday = birthday
+        self.deathday = deathday
+
+def add_actor_table(mydb, mycursor):
+    with open('../data/actor_details.json', "r") as f:
+        datas = json.load(f)
+    for data in datas:
+        actor = Actor(data["name"], data["place_of_birth"], data["biography"], data["birthday"], data["deathday"])
+        query = "INSERT INTO Actor_actor (name, place_of_birth, biography, birthday, deathday) VALUES (%s, %s, %s, %s, %s)"
+        values = (actor.name, actor.place_of_birth, actor.biography, actor.birthday, actor.deathday)
+        mycursor.execute(query, values)
+        mydb.commit()
+        print(f"Actor {actor.name} added to the database")
+
+
 def main():
     mydb = mysql.connector.connect(
     host="final-gr.cvu4iu82orkw.ap-southeast-2.rds.amazonaws.com",
@@ -77,7 +98,7 @@ def main():
     database="final_gr"
     )
     mycursor = mydb.cursor()
-    add_movie_video(mydb, mycursor)
+    add_actor_table(mydb, mycursor)
 
 if __name__ == "__main__":
     main()

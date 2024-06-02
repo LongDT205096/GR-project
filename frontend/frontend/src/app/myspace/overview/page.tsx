@@ -10,19 +10,23 @@ const Overview = () => {
     const [profile, setProfile] = useState(Object);
     const [tempProfile, setTempProfile] = useState(Object);
     const [isEditing, setEditing] = useState(false);
-    const [selectedCountry, setSelectedCountry] = useState('');
+    const [selectedCountry, setSelectedCountry] = useState();
+    const [changed, setChanged] = useState(false);
+
+    const options = useMemo(() => countryList().getData(), []);
+    const countryOptions = useMemo(() => countryList(), []);
 
     useEffect(() => {
         const fetchData = async () => {
             const profile = await getProfile();
             if (profile) {
+                profile.data.country = profile.data.country ? countryOptions.getLabel(profile.data.country) : '';
                 setProfile(profile.data);
-                setSelectedCountry(profile.data.country);
+                setTempProfile(profile.data);
             }
         };
         fetchData();
     }, []);
-
 
     const onClick = () => {
         setEditing(!isEditing);
@@ -33,35 +37,46 @@ const Overview = () => {
 
     const handleEdit = (e: { preventDefault(): unknown; target: { value: any; }; }, field: any) => {
         e.preventDefault()
+        if (profile[field] !== e.target.value) {
+            setChanged(true);
+        }
         setProfile({
             ...profile,
             [field]: e.target.value
         });
     };
-
-    const options = useMemo(() => countryList().getData(), [])
+    
     const handleCountry = (e: any) => {
-        setSelectedCountry(e.value);
+        setSelectedCountry(e);
+        if (profile.country !== e.label) {
+            setChanged(true);
+        }
         setProfile({
             ...profile,
             "country": e.value
         });
-        setTempProfile({
-            ...tempProfile,
-            "country": e.label
-        });
     }
 
-    const handleSave = (e: { preventDefault: () => void; }) => {
+    const handleSave = async (e: any) => {
         e.preventDefault();
+        if(changed) {
+            const repsonse = updateProfile(profile);
+            if ((await repsonse).status === 200) {
+                console.log(repsonse)
+                setChanged(false);
+                setProfile({ ...profile });
+                setProfile({ ...profile, "country": countryOptions.getLabel(profile.country) });
+            }
+        }
+        setTempProfile({});
         setEditing(false);
-        setProfile({ ...tempProfile  });
-        updateProfile(profile);
     }
 
-    const handleCancel = (e: { preventDefault: () => void; }) => {
+    const handleCancel = (e: any) => {
         e.preventDefault();
         setProfile({ ...tempProfile });
+        setTempProfile({});
+        setChanged(false);
         setEditing(false);
     }
 
@@ -121,7 +136,7 @@ const Overview = () => {
                             <div className="grid grid-cols-2">
                                 <div className="px-4 py-2 font-semibold">Country</div>
                                 {isEditing ? (
-                                    <Select options={options} value={selectedCountry} onChange={(e) => handleCountry(e)} />
+                                    <Select options={options} value={selectedCountry} onChange={handleCountry} />
                                 ) : (
                                     <div className="px-4 py-2">{profile.country}</div>
                                 )}

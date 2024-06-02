@@ -3,12 +3,15 @@ import React, { useState, useEffect } from "react";
 import requests from "@/utils/requests";
 import Image from "next/image";
 import Link from "next/link";
+import axios from "axios";
+
 import Pagination from "@/components/Pagination";
 import { useRouter } from "next/navigation";
 
+axios.defaults.baseURL = "http://127.0.0.1:8000/";
 const posterpath = "https://image.tmdb.org/t/p/original";
 
-function Latest({ params }: { params: { id: string } }) {
+function Latest({ params }: { params: {pageid: string } }) {
     const [resultMovie, setResultMovie] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [totalPages, setTotalPages] = useState(1);
@@ -18,7 +21,7 @@ function Latest({ params }: { params: { id: string } }) {
         async function fetchData() {
             try {
                 const response = await fetch(
-                    `${requests.fetchLatestMovies}&page=${params.id}`,
+                    `${requests.fetchLatestMovies}&page=${params.pageid}`,
                     {
                         cache: "no-store",
                     }
@@ -37,7 +40,7 @@ function Latest({ params }: { params: { id: string } }) {
             }
         }
         fetchData();
-    }, [params.id]);
+    }, [params.pageid]);
 
     const handlePageChange = (newPage: string) => {
         setCurrentPage(Number(newPage));
@@ -54,7 +57,7 @@ function Latest({ params }: { params: { id: string } }) {
                     moviename.poster_path && (
                         <div key={index} className="m-4 mb-8 px-4 mx-auto">
                             <div className="flex flex-col h-full rounded-lg bg-gray-200 shadow-lg">
-                                <Link href={`/movies/${moviename.id}`} className="flex flex-col flex-grow">
+                                <Link href={`/movie/${moviename.id}`} className="flex flex-col flex-grow">
                                     <div className="oot-card p-2 flex-grow">
                                         <Image
                                             src={posterpath + moviename.poster_path}
@@ -83,7 +86,7 @@ function Latest({ params }: { params: { id: string } }) {
                 ))}
             </div>
             <Pagination
-                currentPage={Number(params.id)}
+                currentPage={Number(params.pageid)}
                 totalPages={totalPages}
                 onPageChange={handlePageChange}
             />

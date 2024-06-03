@@ -49,13 +49,13 @@ const EmblaCarousel = ({ Categories }: { Categories: any[] }) => {
                         {Categories &&
                             Categories.map(
                                 (category, index) =>
-                                    category.poster_path && (
+                                    category.poster && (
                                         <div key={index} className="embla__slide flex-none mx-1.5 w-1/8">
                                             <div className="embla__slide__inner">
-                                                <Link href={`/${category.number_of_episodes ? 'ott/details' : 'movies'}/${category.id}`}>
+                                                <Link href={"/movie/" + `${category.id}`}>
                                                     <Image
-                                                        src={posterpath + category.poster_path}
-                                                        alt={`${category.original_title}`}
+                                                        src={posterpath + category.poster}
+                                                        alt={`${category.title}`}
                                                         width={200}
                                                         height={200}
                                                         objectFit="cover"

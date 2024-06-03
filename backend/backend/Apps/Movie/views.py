@@ -8,7 +8,7 @@ from .serializer import (
     MovieSerializer,
     MovieBannerSerializer,
     MovieImageSerializer,
-    MovieVideoSerializer
+    MovieVideoSerializer,
 )
 
 from ..Actor.models import Actor
@@ -16,7 +16,7 @@ from ..Director.models import Director
 
 
 class MovieDetailView(APIView):
-    permission_classes = (AllowAny,)
+    permission_classes = [AllowAny]
 
     def get(self, request, pk):
         movie = Movie.objects.get(pk=pk)
@@ -55,3 +55,4 @@ class MovieByGenreView(APIView):
         movie = Movie.objects.all().filter(genres=pk)
         serializer = MovieBannerSerializer(movie, many=True)
         return Response(serializer.data)
+

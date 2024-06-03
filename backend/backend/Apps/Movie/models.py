@@ -53,8 +53,6 @@ class Movie(models.Model):
     budget = models.IntegerField(default=0)
     original_country = CountryField(blank_label="(select country)", blank=True)
     director = models.ForeignKey("Director.Director", on_delete=models.CASCADE)
-    actors = models.ManyToManyField("Actor.Actor")
-    genres = models.ManyToManyField(Genre)
 
     def __str__(self):
         return self.title
@@ -64,6 +62,18 @@ class Movie(models.Model):
         if rate is None:
             return 0.0
         return rate
+    
+
+class Movie_Actor(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    actor = models.ForeignKey("Actor.Actor", on_delete=models.CASCADE)
+    character_name = models.CharField(max_length=50)
+
+
+class Movie_Genre(models.Model):
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
+
 
 class MovieVideo(models.Model):
     TYPE_CHOICES = [

@@ -12,16 +12,16 @@ from .serializer import (
 
 # Create your views here.
 class ProfileView(APIView):
-    serializer_class = ProfileSerializer
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
     def get(self, request):
-        profile = Profile.objects.get(account=request.user)
-        serializer = ProfileSerializer(profile)
-        serializer.data['account'] = serializer.get_account(profile)
-
-        return Response(serializer.data)
+        try:
+            profile = Profile.objects.get(account=request.user)
+            serializer = ProfileSerializer(profile)
+            return Response(serializer.data)
+        except Profile.DoesNotExist:
+            return Response(status=status.HTTP_404_NOT_FOUND)
 
 
 class ProfileUpdateView(APIView):

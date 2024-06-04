@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import React, { useState, useLayoutEffect, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import { getProfile, updateUser } from '@/actions/auth';
+import { getProfile, updateProfile } from '@/actions/auth';
 
 interface Tab {
     name: string;

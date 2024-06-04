@@ -24,13 +24,11 @@ class ActorDetailView(APIView):
 
 class ActorMovieView(APIView):
     permission_classes = [AllowAny]
-
     def get(self, request, pk):
         actor = Actor.objects.get(pk=pk)
         movie_list = Movie_Actor.objects.filter(actor=actor)
         movies = [movie.movie for movie in movie_list]
         serializer = ActorMovieSerializer(movies, many=True)
-
         return Response(serializer.data)
 
 

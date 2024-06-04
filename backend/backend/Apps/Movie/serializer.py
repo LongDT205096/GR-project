@@ -1,6 +1,6 @@
 from rest_framework import serializers
 from .models import Movie, Genre, MovieImage, MovieVideo, Movie_Actor, Movie_Genre
-from ..Actor.models import Actor
+from ..Actor.models import Actor, ActorImage
 from ..Director.models import Director
 from ..Review.models import Review
 from ..Rate.models import Rate
@@ -21,6 +21,31 @@ class MovieSerializer(serializers.ModelSerializer):
     def get_director(self, obj):
         director = Director.objects.get(movie=obj)
         return {"id": director.id, "name": director.name}
+
+    class Meta:
+        model = Movie
+        fields = '__all__'
+
+
+class MovieActorSerializer(serializers.ModelSerializer):
+    actors = serializers.SerializerMethodField()
+    
+    def get_actors(self, obj):
+        datas = Movie_Actor.objects.filter(movie=obj)[:10]
+        actors = []
+        for data in datas:
+            actor = Actor.objects.get(id=data.actor.id)
+            try:
+                image = ActorImage.objects.filter(actor=actor)[:1].get().image.url
+            except:
+                image = None
+            actors.append({
+                "id": actor.id,
+                "name": actor.name,
+                "image": image,
+                "character": data.character_name
+            })
+        return actors
 
     class Meta:
         model = Movie

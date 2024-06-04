@@ -49,10 +49,7 @@ const Login = () => {
             <section className="border-red-500 min-h-screen flex items-center justify-center">
                 <div className="bg-neutral-700 p-5 flex rounded-2xl shadow-lg w-[95%] mx-auto md:max-w-xl items-center justify-center">
                     <div className="w-full px-5">
-                        <h2 className="text-2xl font-bold text-white">Login</h2>
-                        <p className="text-sm mt-4 text-white">
-                            If you have an account, please login
-                        </p>
+                        <h2 className="text-3xl font-bold text-white">Login</h2>
                         <form
                             className="mt-6 text-black"
                             onSubmit={handleSubmit}
@@ -106,16 +103,18 @@ const Login = () => {
                                 Log In
                             </button>
                         </form>
-
-                        <div className="mt-7 grid grid-cols-3 items-center text-gray-500">
+                        <Link href="forgot" className="text-base mt-4 cursor-pointer text-white hover:underline hover:font-semibold inline-block">
+                            Forgot Password?
+                        </Link>
+                        <div className="mt-4 grid grid-cols-3 items-center text-gray-500">
                             <hr className="border-gray-500" />
-                            <p className="text-center text-sm">OR</p>
+                            <p className="text-center text-base">OR</p>
                             <hr className="border-gray-500" />
                         </div>
 
                         <button
                             onClick={loginByGoogle}
-                            className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-sm hover:scale-105 duration-300 "
+                            className="bg-white border py-2 w-full rounded-xl mt-5 flex justify-center items-center text-base hover:scale-105 duration-300 "
                         >
                             <svg
                                 xmlns="http://www.w3.org/2000/svg"
@@ -152,7 +151,7 @@ const Login = () => {
                             <span className="ml-4 text-gray-900">Login with Google</span>
                         </button>
 
-                        <div className="text-sm flex justify-between items-center mt-3">
+                        <div className="text-base flex justify-between items-center mt-3">
                             <p className="text-white">If you don&#39;t have an account...</p>
                             <Link href={`/register`}>
                                 <button className="py-2 px-5 ml-3 bg-white border rounded-xl hover:scale-110 duration-300 text-gray-900 border-blue-400  ">

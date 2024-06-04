@@ -41,17 +41,17 @@ const EmblaCarousel = ({ Categories }: { Categories: any[] }) => {
             onSelect()
         }
     }, [embla])
-
+    
     return (
             <div className="embla" data-axis={axis}>
                 <div ref={emblaRef} className="embla__viewport">
                     <div className="embla__container flex transition-transform duration-0 delay-0">
-                        {Categories &&
+                        { Categories &&
                             Categories.map(
                                 (category, index) =>
                                     category.poster && (
                                         <div key={index} className="embla__slide flex-none mx-1.5 w-1/8">
-                                            <div className="embla__slide__inner">
+                                            <div className="">
                                                 <Link href={"/movie/" + `${category.id}`}>
                                                     <Image
                                                         src={posterpath + category.poster}

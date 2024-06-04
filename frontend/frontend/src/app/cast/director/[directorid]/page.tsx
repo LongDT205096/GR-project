@@ -71,7 +71,7 @@ const Cast = async ({ params }: any) => {
                             {persondetails.name}
                         </h1>
                         <p className="font-italic text-slate-300 text-center text-lg">
-                            Known For:{" " + persondetails.known_for_department}
+                            Known For: Directing
                         </p>
                     </div>
                 </div>

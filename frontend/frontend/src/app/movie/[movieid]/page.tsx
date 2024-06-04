@@ -1,4 +1,5 @@
-import React from "react";
+'use client';
+import React, { useEffect, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -11,13 +12,14 @@ import WatchlistIcon from "@/components/WatchlistIcon";
 import Trailer from "@/components/Trailer";
 import Review from "@/components/Review";
 import Rate from "@/components/Rate";
+import Loader from "@/components/Loader";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 const bannerpath = "https://image.tmdb.org/t/p/original/";
 const posterpath = "https://image.tmdb.org/t/p/w500";
 
-async function getMovieResponse(params: { movieid: string; }) {
-    const api = requests.fetchMovieDetails + params.movieid + "/";
+async function getMovieResponse(movieid: string) {
+    const api = requests.fetchMovieDetails + movieid + "/";
     const MovieApiresponse = await axios.get(api)
         .then((response) => {
             return response.data;
@@ -25,8 +27,8 @@ async function getMovieResponse(params: { movieid: string; }) {
     return MovieApiresponse;
 }
 
-async function getMovieImages(params: { movieid: string; }) {
-    const api = requests.fetchMovieDetails + params.movieid + "/images/";
+async function getMovieImages(movieid: string) {
+    const api = requests.fetchMovieDetails + movieid + "/images/";
     const OtherGalleryImages = axios.get(api)
         .then((response) => {
             return response.data;
@@ -34,20 +36,24 @@ async function getMovieImages(params: { movieid: string; }) {
     return OtherGalleryImages;
 }
 
-// async function getMovieCast(params: { movieid: string }) {
-//     const MovieCastresponse = await fetch(
-//         `${requests.fetchMovieDetails}${params.movieid}/credits?api_key=e4d2477534d5a54cb6f0847a0ee853eb`,
-//         {
-//             cache: "no-store",
-//         }
-//     );
+async function getMovieCast(movieid: string) {
+    const api = requests.fetchMovieDetails + movieid + "/actors/";
+    const MovieCastresponse = axios.get(api)
+        .then((response) => {
+            return response.data;
+        })
+    return MovieCastresponse;
+}
 
-//     if (!MovieCastresponse.ok) {
-//         return new Error("data not fetching!");
-//     }
-
-//     return MovieCastresponse.json();
-// }
+async function getMovieReview(movieid: String) {
+    const api = requests.fetchMovieDetails + movieid + "/reviews/";
+    const movieReview = await axios.get(api)
+        .then((response) => {
+            return response.data;
+        })
+    console.log(movieReview.length)
+    return movieReview;
+}
 
 
 // async function getRecommendations(params: { movieid: string; }) {
@@ -80,10 +86,39 @@ async function getMovieImages(params: { movieid: string; }) {
 //     return similarMovies.json();
 // }
 
-const Movie = async ({ params }: { params: { movieid: any } }) => {
-    const movieDataAll = await getMovieResponse(params);
-    // const MovieCast = await getMovieCast(params);
-    const movieImages = await getMovieImages(params);
+const Movie = ({ params }: { params: { movieid: any } }) => {
+    const [movieDataAll, setMovieDataAll] = useState(Object);
+    const [movieCast, setMovieCast] = useState(Object);
+    const [movieImages, setMovieImages] = useState(Object);
+    const [movieReview, setMovieReview] = useState(Object);
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        const fetchData = async () => {
+            try {
+                const movieDataAll = await getMovieResponse(params.movieid);
+                const movieCast = await getMovieCast(params.movieid);
+                const movieImages = await getMovieImages(params.movieid);
+                const reviewCall = await getMovieReview(params.movieid);
+
+                setMovieDataAll(movieDataAll);
+                setMovieCast(movieCast);
+                setMovieImages(movieImages);
+                setMovieReview(reviewCall);
+                setLoading(false);
+            } catch (error) {
+                console.error(error);
+                setLoading(false);
+            }
+        };
+
+        fetchData();
+    }, [params.movieid]);
+
+    if (loading) {
+        return <Loader />;
+    }
+
     // // const recommendationsCall = await getRecommendations(params);
     // const recommendations = recommendationsCall.results;
     // // const similarmoviesCall = await getSimilar(params);
@@ -91,14 +126,14 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
 
     return (
         <div className="overflow-x-hidden">
-            <div
-                className="bg-cover relative bg-fixed bg-center md:min-h-screen h-full w-full flex md:flex-row flex-col"
-                style={{
-                    backgroundImage: `linear-gradient(to bottom, transparent, black),url(${bannerpath + movieImages.backdrops[0].image})`,
-                }}>
+            <div className="bg-cover relative bg-fixed bg-center md:min-h-screen h-full w-full flex md:flex-row flex-col" style={movieImages && movieImages.backdrops && movieImages.backdrops[0] ? {
+                backgroundImage: `linear-gradient(to bottom, transparent, black),url(${bannerpath + movieImages.backdrops[0].image})`,
+            } : {}}>
                 <div className="imgContainer flex items-center p-3 justify-center flex-initial md:w-1/3 w-full">
                     <Image
-                        src={posterpath + movieImages.posters[0].image}
+                        src={movieImages.logos &&
+                            movieImages.logos[0] &&
+                            movieImages.logos[0].image ? posterpath + movieImages.posters[0].image : ""}
                         alt={movieDataAll.title}
                         width={250}
                         height={250}
@@ -166,8 +201,8 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
                             <h1 className="text-2xl">Summary</h1>
                             <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">{movieDataAll.summary}</p>
                         </div>
-                        <div className="mt-4">
-                            <h1 className="text-2xl">{movieDataAll.director.name}</h1>
+                        <div className="mt-4 inline-block">
+                            <Link className="text-2xl hover:underline cursor" href={`/cast/director/${movieDataAll.director.id}`}>{movieDataAll.director.name}</Link>
                             <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">
                                 Director
                             </p>
@@ -177,14 +212,13 @@ const Movie = async ({ params }: { params: { movieid: any } }) => {
             </div>
 
             <div className="h-screen flex">
-                <div className="w-3/4 mr-[10%] flex justify-end">
+                <div className="w-3/4 flex flex-col items-center">
+                    <div className="w-[80%]">
+                        <CastCarousel Casts={movieCast.actors} />
+                    </div>
 
-                    {/* <div className="castSection">
-                    <CastCarousel Cast={MovieCast.cast} />
-                </div> */}
-
-                    <div className="w-[85%] review_section">
-                        <Review movieid={movieDataAll.id} />
+                    <div className="w-[80%]">
+                        <Review Reviews={movieReview} movieId={params.movieid} />
                     </div>
 
                     {/* <div className="otherImagesGalleryContainer">

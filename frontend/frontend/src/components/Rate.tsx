@@ -37,7 +37,6 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
     const handleModal = () => {
         fetchUserRating();
         setModal(!openModal)
-        console.log(userRating);
     }
 
     const handleSave = () => {
@@ -49,7 +48,6 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
         if (userRating == 0) {
             axios.post(api, body, config)
             .then((response) => {
-                handleModal();
                 window.location.reload();
             })
             .catch((error) => {
@@ -58,13 +56,13 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
         } else if (userRating > 0){
             axios.put(api, body, config)
             .then((response) => {
-                handleModal();
                 window.location.reload();
             })
             .catch((error) => {
                 console.log(error);
             });
         }
+        handleModal();
     }
 
     const handleRemove = () => {
@@ -87,7 +85,7 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
             >
                 What's your Vibe?
             </button>
-            {openModal &&
+            { openModal &&
                 <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
                     <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50'></div>
                     <div className='relative w-3/5 h-2/5 max-w-[460px] bg-slate-800 shadow-lg py-2 rounded-md z-10 flex flex-col'>

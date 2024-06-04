@@ -2,13 +2,46 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import Select from 'react-select';
 import countryList from 'react-select-country-list';
+import axios from 'axios';
 
 import Widget from '@/components/Widget';
 import { getProfile, updateProfile } from '@/actions/auth';
+import requests from '@/utils/requests';
+
+axios.defaults.baseURL = 'http://127.0.0.1:8000/';
+
+const token = localStorage.getItem('token');
+const config = {
+    headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer ' + token,
+        'Accept': 'application/json'
+    }
+}
+
+// async function getPersonalRating() {
+//     const api = requests.fetchMovieDetails + "rates/personal/";
+//     const personalRating = axios.get(api, config)
+//         .then((response) => {
+//             return response.data;
+//         })
+//     return personalRating;
+// }
+
+async function getPersonalReview() {
+    const api = requests.fetchMovieDetails + "reviews/personal/";
+    const personalReview = axios.get(api, config)
+        .then((response) => {
+            return response.data;
+        })
+    return personalReview;
+}
 
 const Overview = () => {
     const [profile, setProfile] = useState(Object);
     const [tempProfile, setTempProfile] = useState(Object);
+    const [personalRating, setPersonalRating] = useState([]);
+    const [personalReview, setPersonalReview] = useState([]);
     const [isEditing, setEditing] = useState(false);
     const [selectedCountry, setSelectedCountry] = useState();
     const [changed, setChanged] = useState(false);
@@ -19,16 +52,25 @@ const Overview = () => {
     useEffect(() => {
         const fetchData = async () => {
             const profile = await getProfile();
+            // const rate = await getPersonalRating();
+            const review = await getPersonalReview();
             if (profile) {
                 profile.data.country = profile.data.country ? countryOptions.getLabel(profile.data.country) : '';
                 setProfile(profile.data);
                 setTempProfile(profile.data);
+            }
+            // if (rate) {
+            //     setPersonalRating(rate);
+            // }
+            if (review) {
+                setPersonalReview(review);
             }
         };
         fetchData();
     }, []);
 
     const onClick = () => {
+        console.log(profile);
         setEditing(!isEditing);
         if (!isEditing) {
             setTempProfile({ ...profile });
@@ -45,7 +87,7 @@ const Overview = () => {
             [field]: e.target.value
         });
     };
-    
+
     const handleCountry = (e: any) => {
         setSelectedCountry(e);
         if (profile.country !== e.label) {
@@ -59,10 +101,9 @@ const Overview = () => {
 
     const handleSave = async (e: any) => {
         e.preventDefault();
-        if(changed) {
-            const repsonse = updateProfile(profile);
-            if ((await repsonse).status === 200) {
-                console.log(repsonse)
+        if (changed) {
+            const repsonse = await updateProfile(profile);
+            if (repsonse.status === 200) {
                 setChanged(false);
                 setProfile({ ...profile });
                 setProfile({ ...profile, "country": countryOptions.getLabel(profile.country) });
@@ -157,9 +198,9 @@ const Overview = () => {
                     </div>
                 </form>
 
-                <div className="bg-white p-3 shadow-sm px-[5%] pb-[2%]">
-                    <div>
-                        <div>
+                <div className="bg-white p-3 shadow-sm px-[5%] pb-[2%] flex justify-start">
+                    <div className='flex w-[50%] p-2'>
+                        <div className='w-full'>
                             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                                 <span className="text-green-500">
                                     <svg className="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -171,19 +212,15 @@ const Overview = () => {
                                 <span className="tracking-wide">Your Ratings</span>
                             </div>
                             <ul className="list-inside space-y-2">
-                                <li>
-                                    <div className="text-teal-600">Hello World</div>
-                                    <div className="text-gray-500 text-xs">March 2020 - Now</div>
-                                </li>
-                                <li>
+                                <li className='border-gray-400 border-2'>
                                     <div className="text-teal-600">Hello World</div>
                                     <div className="text-gray-500 text-xs">March 2020 - Now</div>
                                 </li>
                             </ul>
                         </div>
                     </div>
-                    <div className='mt-5'>
-                        <div>
+                    <div className='flex w-[50%] p-2'>
+                        <div className='w-full'>
                             <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
                                 <span className="text-green-500">
                                     <svg className="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -195,14 +232,12 @@ const Overview = () => {
                                 <span className="tracking-wide">Your Reviews</span>
                             </div>
                             <ul className="list-inside space-y-2">
-                                <li>
-                                    <div className="text-teal-600">Hello World</div>
-                                    <div className="text-gray-500 text-xs">March 2020 - Now</div>
-                                </li>
-                                <li>
-                                    <div className="text-teal-600">Hello World</div>
-                                    <div className="text-gray-500 text-xs">March 2020 - Now</div>
-                                </li>
+                                {personalReview.map((review: { movie: string }, index) => (
+                                    <li key={index} className='border-gray-400 border-2'>
+                                        <div className="text-teal-600">{review.movie}</div>
+                                        <div className="text-gray-500 text-xs">March 2020 - Now</div>
+                                    </li>
+                                ))}
                             </ul>
                         </div>
                     </div>

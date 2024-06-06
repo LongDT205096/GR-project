@@ -8,7 +8,6 @@ import Link from "next/link";
 import { NextButton, PrevButton } from './EmblaCarouselButtons';
 
 type Axis = 'x' | 'y'
-
 const CastCarousel = ({ Casts }: { Casts: any[] }) => {
     const [axis, setAxis] = useState<Axis>('x')
     const [forceWheelAxis, setForceWheelAxis] = useState<Axis | undefined>()
@@ -43,7 +42,7 @@ const CastCarousel = ({ Casts }: { Casts: any[] }) => {
     }, [embla])
 
     return (
-        <section className="mx-auto my-8">
+        <section className="mx-auto mt-8 mb-4">
             <div className="flex heading justify-between">
                 <div className="flex items-center space-x-2 mb-4">
                     <div className="w-1 rounded-sm h-full bg-white"></div>
@@ -66,22 +65,23 @@ const CastCarousel = ({ Casts }: { Casts: any[] }) => {
                                 (cast, index) =>
                                     cast.image && (
                                         <div key={index} className="embla__slide flex-none mx-1.5 w-1/8">
-                                            <Link href={"/cast/actor/" + `${cast.id}`}>
-                                                <Image
-                                                    src={posterpath + cast.image}
-                                                    alt={`${cast.name}`}
-                                                    width={200}
-                                                    height={200}
-                                                    objectFit="cover"
-                                                    className="cursor-pointer slide rounded-md"
-                                                    blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM0dgn9DwADSwHNRhjk3gAAAABJRU5ErkJggg=="
-                                                    unoptimized
-                                                />
-                                            </Link>
-                                            <div className="text-center my-3">
-                                                <h1 className="font-bold">{cast.name}</h1>
-                                                <p className="font-light text-sm">{cast.character}</p>
-                                            </div>
+                                                <Link href={"/cast/actor/" + `${cast.id}`}>
+                                                    <Image
+                                                        src={posterpath + cast.image}
+                                                        alt={`${cast.name}`}
+                                                        width={200}
+                                                        height={200}
+                                                        objectFit="cover"
+                                                        className="cursor-pointer slide rounded-lg"
+                                                        blurDataURL="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mM0dgn9DwADSwHNRhjk3gAAAABJRU5ErkJggg=="
+                                                        unoptimized
+                                                    />
+                                                </Link>
+                                                <div className="text-center my-3">
+                                                    <h1 className="font-bold">{cast.name}</h1>
+                                                    <p className="font-light text-sm">{cast.character}</p>
+                                                </div>
+
                                         </div>
                                     )
                             )

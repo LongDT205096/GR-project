@@ -1,5 +1,5 @@
 "use client"
-import React, { use, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import requests from '@/utils/requests';
 
@@ -8,7 +8,7 @@ axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) => {
     const [openModal, setModal] = useState(false);
     const [rating, setRating] = useState(0);
-    const [userRating, setUserRating] = useState(0);
+    const [ownRating, setOwnRating] = useState(0);
     const [hoverRating, setHoverRating] = useState(0);
 
     const api = requests.fetchMovieDetails + movieId + '/rate/';
@@ -21,21 +21,21 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
         }
     }
 
-    async function fetchUserRating() {
+    async function fetchOwnRating() {
         axios.get(api, config)
             .then((response) => {
-                if(response.data.rate){
+                if (response.data.rate) {
                     setRating(response.data.rate);
-                    setUserRating(response.data.rate);
+                    setOwnRating(response.data.rate);
                 }
             })
             .catch((error) => {
                 console.log(error);
-        });
+            });
     }
 
     const handleModal = () => {
-        fetchUserRating();
+        fetchOwnRating();
         setModal(!openModal)
     }
 
@@ -45,22 +45,22 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
             "rate": rating
         });
 
-        if (userRating == 0) {
+        if (ownRating == 0) {
             axios.post(api, body, config)
-            .then((response) => {
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-        } else if (userRating > 0){
+                .then((response) => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else if (ownRating > 0) {
             axios.put(api, body, config)
-            .then((response) => {
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.log(error);
-            });
+                .then((response) => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
         }
         handleModal();
     }
@@ -75,7 +75,7 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
                 console.log(error);
             });
     }
- 
+
     return (
         <div>
             <button
@@ -85,13 +85,13 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
             >
                 What's your Vibe?
             </button>
-            { openModal &&
+            {openModal &&
                 <div className='fixed top-0 left-0 w-full h-full flex justify-center items-center'>
                     <div className='absolute top-0 left-0 w-full h-full bg-black opacity-50'></div>
-                    <div className='relative w-3/5 h-2/5 max-w-[460px] bg-slate-800 shadow-lg py-2 rounded-md z-10 flex flex-col'>
-                        <h1 className='text-3xl font-medium text-slate-50 py-3 px-6 mb-4'>Rating</h1>
-                        <div className='px-4 pb-4 flex-grow flex flex-col items-center justify-center'>
-                            <div className="text-center mb-4 text-2xl">
+                    <div className='relative w-[600px] h-2/5 bg-slate-800 shadow-lg py-2 rounded-md z-10 flex flex-col'>
+                        <h1 className='text-3xl font-medium text-slate-50 pt-3 px-6 mb-4'>Rating</h1>
+                        <div className='px-4 mt-2 flex flex-col items-center'>
+                            <div className="text-center mb-6 text-2xl">
                                 What do you think about {movieTitle}?
                             </div>
                             <div className="flex items-center justify-center">
@@ -112,7 +112,8 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
                                 ))}
                             </div>
                         </div>
-                        <div className='flex justify-evenly items-center px-4 py-2'>
+                        
+                        <div className='flex justify-evenly items-center px-4 my-8'>
                             <button
                                 type='button'
                                 className='h-10 px-4 text-lg rounded-md bg-gray-700 text-white hover:bg-white/20 '
@@ -120,7 +121,7 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
                             >
                                 Save
                             </button>
-                            
+
                             <button
                                 type='button'
                                 className='h-10 px-4 text-lg rounded-md bg-gray-700 text-white hover:bg-white/20 '
@@ -129,6 +130,16 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
                                 Close
                             </button>
                         </div>
+                        <div className="text-center text-2xl">
+                            <button
+                                type='button'
+                                className='h-10 px-4 text-lg rounded-md text-white hover:font-semibold'
+                                onClick={handleSave}
+                            >
+                                Clear my rating
+                            </button>
+                        </div>
+
                     </div>
                 </div>
             }

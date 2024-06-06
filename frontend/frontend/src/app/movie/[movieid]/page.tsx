@@ -1,5 +1,4 @@
-'use client';
-import React, { useEffect, useState } from "react";
+import React from "react";
 import Image from "next/image";
 import Link from "next/link";
 import axios from "axios";
@@ -12,7 +11,6 @@ import WatchlistIcon from "@/components/WatchlistIcon";
 import Trailer from "@/components/Trailer";
 import Review from "@/components/Review";
 import Rate from "@/components/Rate";
-import Loader from "@/components/Loader";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 const bannerpath = "https://image.tmdb.org/t/p/original/";
@@ -51,7 +49,6 @@ async function getMovieReview(movieid: String) {
         .then((response) => {
             return response.data;
         })
-    console.log(movieReview.length)
     return movieReview;
 }
 
@@ -86,46 +83,24 @@ async function getMovieReview(movieid: String) {
 //     return similarMovies.json();
 // }
 
-const Movie = ({ params }: { params: { movieid: any } }) => {
-    const [movieDataAll, setMovieDataAll] = useState(Object);
-    const [movieCast, setMovieCast] = useState(Object);
-    const [movieImages, setMovieImages] = useState(Object);
-    const [movieReview, setMovieReview] = useState(Object);
-    const [loading, setLoading] = useState(true);
 
-    useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const movieDataAll = await getMovieResponse(params.movieid);
-                const movieCast = await getMovieCast(params.movieid);
-                const movieImages = await getMovieImages(params.movieid);
-                const reviewCall = await getMovieReview(params.movieid);
 
-                setMovieDataAll(movieDataAll);
-                setMovieCast(movieCast);
-                setMovieImages(movieImages);
-                setMovieReview(reviewCall);
-                setLoading(false);
-            } catch (error) {
-                console.error(error);
-                setLoading(false);
-            }
-        };
-
-        fetchData();
-    }, [params.movieid]);
-
-    if (loading) {
-        return <Loader />;
-    }
-
+const Movie = async ({ params }: { params: any }) => {
+    const movieDataAll = await getMovieResponse(params.movieid);
+    const movieCast = await getMovieCast(params.movieid);
+    const movieImages = await getMovieImages(params.movieid);
+    const movieReview = await getMovieReview(params.movieid);
     // // const recommendationsCall = await getRecommendations(params);
     // const recommendations = recommendationsCall.results;
     // // const similarmoviesCall = await getSimilar(params);
     // const similarmovie = similarmoviesCall.results;
 
+    function numberWithCommas(x: number) {
+        return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+    }
+
     return (
-        <div className="overflow-x-hidden">
+        <div className="overflow-visible">
             <div className="bg-cover relative bg-fixed bg-center md:min-h-screen h-full w-full flex md:flex-row flex-col" style={movieImages && movieImages.backdrops && movieImages.backdrops[0] ? {
                 backgroundImage: `linear-gradient(to bottom, transparent, black),url(${bannerpath + movieImages.backdrops[0].image})`,
             } : {}}>
@@ -180,7 +155,7 @@ const Movie = ({ params }: { params: { movieid: any } }) => {
                         <ul className="flex gap-5 text-slate-300 sm:justify-start justify-center my-4">
                             <li className="text-2xl flex items-center text-slate-300 font-bold md:justify-start justify-center">
                                 <span className="material-icons pr-3">star</span>
-                                {movieDataAll.ave_rate.toFixed(1) + "/ " + "10.0"}
+                                {movieDataAll.ave_rate.toFixed(1) + "/ " + "5.0"}
                             </li>
                             <li>
                                 <Rate movieId={movieDataAll.id} movieTitle={movieDataAll.title} />
@@ -217,8 +192,10 @@ const Movie = ({ params }: { params: { movieid: any } }) => {
                         <CastCarousel Casts={movieCast.actors} />
                     </div>
 
+                    <hr className="w-[80%] mx-auto my-4 border-t-2 border-gray-500" />
+
                     <div className="w-[80%]">
-                        <Review Reviews={movieReview} movieId={params.movieid} />
+                        <Review Reviews={movieReview.reviews} movieId={params.movieid} />
                     </div>
 
                     {/* <div className="otherImagesGalleryContainer">
@@ -250,10 +227,29 @@ const Movie = ({ params }: { params: { movieid: any } }) => {
                 </div> */}
                 </div>
 
-                <div className="w-px bg-white"></div>
-
-                <div className="w-1/4 flex">
-                    <p className="text-white">Phần bên phải</p>
+                <div className="w-1/4 flex flex-col">
+                    <div className="w-[80%] mx-auto my-4">
+                        <ul className="pt-8 flex flex-col gap-2">
+                            <li className="flex-col items-center gap-2">
+                                <p className="text-2xl">Status</p>
+                                <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">
+                                    Release
+                                </p>
+                            </li>
+                            <li className="flex-col items-center gap-2">
+                                <p className="text-2xl">Budget</p>
+                                <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">
+                                    ${numberWithCommas(movieDataAll.budget)}
+                                </p>
+                            </li>
+                            <li className="flex-col items-center gap-2">
+                                <p className="text-2xl">Revenue</p>
+                                <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">
+                                    ${numberWithCommas(movieDataAll.revenue)}
+                                </p>
+                            </li>
+                        </ul>
+                    </div>
                 </div>
             </div>
         </div>

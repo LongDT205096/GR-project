@@ -13,6 +13,7 @@ const requests = {
   fetchSeriesDetails: `${BASE_URL}/tv/`,
   fetchMovieDetails: "/movie/",
   fetchActorDetails: "/actor/",
+  fetchDirectorDetails: "/director/",
   fetchLatestTvSeries: `${BASE_URL}/discover/tv?api_key=${API_KEY}`,
   fetchPerson: `${BASE_URL}/person/`,
   fetchOttTv: `${BASE_URL}/discover/tv?api_key=${API_KEY}&with_networks=`,

@@ -26,12 +26,14 @@ class ReviewListView(APIView):
         return Response({
             'reviews': serializer.data,
             'chart': {
-                'rate_count': rate_count,
-                'rate_1': rate_1,
-                'rate_2': rate_2,
-                'rate_3': rate_3,
-                'rate_4': rate_4,
-                'rate_5': rate_5
+                'all': rate_count,
+                'rate_num' :{
+                    'rate_1': rate_1,
+                    'rate_2': rate_2,
+                    'rate_3': rate_3,
+                    'rate_4': rate_4,
+                    'rate_5': rate_5
+                }
             }
         })
 

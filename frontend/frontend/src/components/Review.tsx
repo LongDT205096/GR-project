@@ -3,23 +3,10 @@ import Link from "next/link";
 import requests from "@/utils/requests";
 import ReviewSlider from "./ReviewSlider";
 
-axios.defaults.baseURL = "https://127.0.0.1:8000/";
-
-async function getMovieReview(movieid: String) {
-    const api = requests.fetchMovieDetails + movieid + "/reviews/";
-    const movieReview = await axios.get(api)
-        .then((response) => {
-            return response.data;
-        })
-    console.log(movieReview.length)
-    return movieReview;
-}
-
-const Review = ({ Reviews, movieId }: { Reviews: any[], movieId: number }) => {
+const Review = ({ Reviews, movieId }: { Reviews: any[], movieId: string }) => {
     const reviewCall = Reviews;
-
     return (
-        <section className="mx-auto my-8">
+        <section className="mx-auto my-4">
             <div className="flex heading justify-between">
                 <div className="flex items-center space-x-2 mb-4">
                     <div className="w-1 rounded-sm h-full bg-white"></div>
@@ -35,7 +22,7 @@ const Review = ({ Reviews, movieId }: { Reviews: any[], movieId: number }) => {
             </div>
             { reviewCall && reviewCall.length > 0 ? (
                 <ReviewSlider reviewResults={reviewCall} />) :
-                <p className="text-2xl">No reviews found</p>}
+                <p className="text-2xl">No reviews found</p> }
         </section>
     );
 };

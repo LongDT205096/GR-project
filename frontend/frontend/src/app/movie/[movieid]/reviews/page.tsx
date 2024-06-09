@@ -27,6 +27,7 @@ const Review = ({ params }: { params: { movieid: string } }) => {
             const data = await getMovieReview(params.movieid);
             setMovieReview(data);
             setLoading(false);
+            console.log(data)
         }
         fetchData();
     }, []);
@@ -36,6 +37,9 @@ const Review = ({ params }: { params: { movieid: string } }) => {
     }
 
     const calculateWidth = (value: number, max: number) => {
+        if (max === 0) {
+            return 0;
+        }
         return (value / max) * 100;
     };
     

@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from .models import Movie, Genre, MovieImage, MovieVideo
+from .models import Movie, Genre, MovieImage, MovieVideo, Movie_Genre
 from .serializer import (
     GenreSerializer,
     MovieSerializer,
@@ -42,6 +42,14 @@ class MovieVideoView(APIView):
         return Response(serializer.data)
     
 
+class MovieActorView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request, pk):
+        movie = Movie.objects.get(pk=pk)
+        serializer = MovieActorSerializer(movie)
+        return Response(serializer.data)
+
+
 class GenreListView(APIView):
     permission_classes = [AllowAny]
     def get(self, request):
@@ -53,14 +61,23 @@ class GenreListView(APIView):
 class MovieByGenreView(APIView):
     permission_classes = [AllowAny]
     def get(self, request, pk):
-        movie = Movie.objects.all().filter(genres=pk)
+        data = Movie_Genre.objects.all().filter(genre=pk)
+        return Response({
+            "result": [MovieBannerSerializer(Movie.objects.get(movie=movie.movie)) for movie in data]
+        })
+
+
+class TrendingMoviesView(APIView):
+    permission_classes = [AllowAny]
+    def get(self, request):
+        movie = Movie.objects.all().order_by('-ave_rate')[:15]
         serializer = MovieBannerSerializer(movie, many=True)
         return Response(serializer.data)
 
 
-class MovieActorView(APIView):
+class LatestMoviesView(APIView):
     permission_classes = [AllowAny]
-    def get(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
-        serializer = MovieActorSerializer(movie)
+    def get(self, request):
+        movie = Movie.objects.all().order_by('-release_date')[:20]
+        serializer = MovieBannerSerializer(movie, many=True)
         return Response(serializer.data)

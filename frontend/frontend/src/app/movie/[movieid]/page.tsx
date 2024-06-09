@@ -189,7 +189,7 @@ const Movie = async ({ params }: { params: any }) => {
             <div className="h-screen flex">
                 <div className="w-3/4 flex flex-col items-center">
                     <div className="w-[80%]">
-                        <CastCarousel Casts={movieCast.actors} />
+                        <CastCarousel Casts={movieCast.actors} movieId={params.movieid} />
                     </div>
 
                     <hr className="w-[80%] mx-auto my-4 border-t-2 border-gray-500" />
@@ -233,7 +233,7 @@ const Movie = async ({ params }: { params: any }) => {
                             <li className="flex-col items-center gap-2">
                                 <p className="text-2xl">Status</p>
                                 <p className="text-lg font-light my-2 md:w-2/3 w-[95%] md:mx-0 mx-auto">
-                                    Release
+                                    Released
                                 </p>
                             </li>
                             <li className="flex-col items-center gap-2">

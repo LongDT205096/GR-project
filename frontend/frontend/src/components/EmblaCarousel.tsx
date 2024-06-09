@@ -13,7 +13,7 @@ const EmblaCarousel = ({ Categories }: { Categories: any[] }) => {
     const [axis, setAxis] = useState<Axis>('x')
     const [forceWheelAxis, setForceWheelAxis] = useState<Axis | undefined>()
     const [target, setTarget] = useState<Element | undefined>()
-    const [emblaRef, embla] = useEmblaCarousel({ loop: true, skipSnaps: true, axis }, [
+    const [emblaRef, embla] = useEmblaCarousel({ skipSnaps: true, axis }, [
         WheelGesturesPlugin({
             forceWheelAxis,
             target,
@@ -49,12 +49,13 @@ const EmblaCarousel = ({ Categories }: { Categories: any[] }) => {
                         { Categories &&
                             Categories.map(
                                 (category, index) =>
-                                    category.poster && (
+                                    category.images && 
+                                    category.images.poster && (
                                         <div key={index} className="embla__slide flex-none mx-1.5 w-1/8">
                                             <div className="">
                                                 <Link href={"/movie/" + `${category.id}`}>
                                                     <Image
-                                                        src={posterpath + category.poster}
+                                                        src={posterpath + category.images.poster}
                                                         alt={`${category.title}`}
                                                         width={200}
                                                         height={200}

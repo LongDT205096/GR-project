@@ -8,7 +8,7 @@ import Link from "next/link";
 import { NextButton, PrevButton } from './EmblaCarouselButtons';
 
 type Axis = 'x' | 'y'
-const CastCarousel = ({ Casts }: { Casts: any[] }) => {
+const CastCarousel = ({ Casts, movieId }: { Casts: any[], movieId: string }) => {
     const [axis, setAxis] = useState<Axis>('x')
     const [forceWheelAxis, setForceWheelAxis] = useState<Axis | undefined>()
     const [target, setTarget] = useState<Element | undefined>()
@@ -53,7 +53,7 @@ const CastCarousel = ({ Casts }: { Casts: any[] }) => {
                     <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" className="w-6 h-6 text-white">
                         <path stroke-linecap="round" stroke-linejoin="round" d="m8.25 4.5 7.5 7.5-7.5 7.5" />
                     </svg>
-                    {/* <Link href={`${movieid}/cast`} className="inline-block align-middle hover:underline">All Cast</Link> */}
+                    <Link href={`${movieId}/cast`} className="inline-block align-middle hover:underline">All Cast</Link>
                 </button>
             </div>
 

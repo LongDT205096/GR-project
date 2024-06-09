@@ -9,6 +9,7 @@ from ..Rate.models import Rate
 class MovieSerializer(serializers.ModelSerializer):
     genres = serializers.SerializerMethodField()
     director = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
     
     def get_genres(self, obj):
         genre_list = Movie_Genre.objects.filter(movie=obj)
@@ -18,6 +19,29 @@ class MovieSerializer(serializers.ModelSerializer):
             "name": genre.name 
         } for genre in genres]
     
+    def get_images(self, obj):
+        try:
+            poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
+        except:
+            poster = None
+
+        try:
+            backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
+        except:
+            backdrop = None
+
+        try:
+            logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
+        except:
+            logo = None
+
+        return {
+                "logo": logo,
+                "poster": poster,
+                "backdrop": backdrop
+            }
+
+
     def get_director(self, obj):
         director = Director.objects.get(movie=obj)
         return {"id": director.id, "name": director.name}
@@ -50,12 +74,6 @@ class MovieActorSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = '__all__'
-
-
-class MovieBannerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Movie
-        fields = ['id', 'title', 'release_date', 'ave_rate']
 
 
 class GenreSerializer(serializers.ModelSerializer):
@@ -117,3 +135,33 @@ class MovieVideoSerializer(serializers.Serializer):
             'featurettes': VideoSerializer(featurettes, many=True).data,
             'opening Credits': VideoSerializer(opening_credits, many=True).data
         }
+
+
+class MovieBannerSerializer(serializers.ModelSerializer):
+    images = serializers.SerializerMethodField()
+
+    def get_images(self, obj):
+        try:
+            logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
+        except:
+            logo = None
+
+        try:
+            poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
+        except:
+            poster = None
+
+        try:
+            backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
+        except:
+            backdrop = None
+
+        return {
+            "logo": logo,   
+            "poster": poster,
+            "backdrop": backdrop
+        }
+
+    class Meta:
+        model = Movie
+        fields = ['id', 'title', 'release_date', 'ave_rate', 'summary', 'images']

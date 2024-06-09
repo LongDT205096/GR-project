@@ -10,15 +10,32 @@ axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
 async function getMovieReview(movieid: String) {
     const api = requests.fetchMovieDetails + movieid + "/reviews/";
+    const token = localStorage.getItem("token");
+    if (token) {
+        const body = {
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": "Bearer " + token,
+                "Accept": "application/json",
+            },
+        };
+        const movieReview = await axios.get(api, body)
+            .then((response) => {
+                return response.data;
+            });
+        return movieReview;
+    }
+
     const movieReview = await axios.get(api)
         .then((response) => {
             return response.data;
-        })
+        });
     return movieReview;
 }
 
 const Review = ({ params }: { params: { movieid: string } }) => {
     const [movieReview, setMovieReview] = useState([] as any);
+    const [ownReview, setOwnReview] = useState<null>(null);
     const [openModal, setModal] = useState(false);
     const [loading, setLoading] = useState(true);
 
@@ -26,6 +43,11 @@ const Review = ({ params }: { params: { movieid: string } }) => {
         const fetchData = async () => {
             const data = await getMovieReview(params.movieid);
             setMovieReview(data);
+            if (data.own !== null) {
+                setOwnReview(data.own);
+            } else {
+                setOwnReview(null);
+            }
             setLoading(false);
         }
         fetchData();
@@ -36,6 +58,9 @@ const Review = ({ params }: { params: { movieid: string } }) => {
     }
 
     const calculateWidth = (value: number, max: number) => {
+        if (max === 0) {
+            return 0;
+        }
         return (value / max) * 100;
     };
     
@@ -74,7 +99,7 @@ const Review = ({ params }: { params: { movieid: string } }) => {
                                         </div>
 
                                         <div className="mt-4 min-w-0 flex-1 space-y-4 sm:mt-0">
-                                            <h1>Title:{review.title}</h1>
+                                            <h1>Title: {review.title}</h1>
                                             <p className="text-base font-normal text-white">{review.content}</p>
 
                                             <div className="flex items-center gap-4">
@@ -170,13 +195,12 @@ const Review = ({ params }: { params: { movieid: string } }) => {
                                 </div>
                             ))}
                         </div>
-
-                        <button type="button" onClick={handleModal} className="mt-6 shrink-0 space-y-4 mb-2 me-2 rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">Write a review</button>
+                        <button type="button" onClick={handleModal} className="mt-6 shrink-0 space-y-4 mb-2 me-2 rounded-lg bg-primary-700 px-5 py-2.5 text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">{ ownReview ? "Your review" : "Write a review"}</button>            
                     </div>
                 </div>
             </div>
             
-            {openModal && <ReviewModal movieId={params.movieid} handleModal={handleModal} />}
+            {openModal && <ReviewModal movieId={params.movieid} handleModal={handleModal} ownReview={ownReview} />}
         </div>
     );
 }

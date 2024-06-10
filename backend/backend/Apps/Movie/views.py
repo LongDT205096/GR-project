@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
-from .models import Movie, Genre, MovieImage, MovieVideo, Movie_Genre
+from .models import Movie, Genre, Movie_Genre
 from .serializer import (
     GenreSerializer,
     MovieSerializer,
@@ -11,9 +11,6 @@ from .serializer import (
     MovieVideoSerializer,
     MovieActorSerializer
 )
-
-from ..Actor.models import Actor
-from ..Director.models import Director
 
 
 class MovieDetailView(APIView):
@@ -28,6 +25,7 @@ class MovieDetailView(APIView):
 
 class MovieImageView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, pk):
         movie = Movie.objects.get(pk=pk)
         serializer = MovieImageSerializer(movie)
@@ -36,6 +34,7 @@ class MovieImageView(APIView):
 
 class MovieVideoView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, pk):
         movie = Movie.objects.get(pk=pk)
         serializer = MovieVideoSerializer(movie)
@@ -44,6 +43,7 @@ class MovieVideoView(APIView):
 
 class MovieActorView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, pk):
         movie = Movie.objects.get(pk=pk)
         serializer = MovieActorSerializer(movie)
@@ -52,6 +52,7 @@ class MovieActorView(APIView):
 
 class GenreListView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request):
         genres = Genre.objects.all()
         serializer = GenreSerializer(genres, many=True)
@@ -60,6 +61,7 @@ class GenreListView(APIView):
 
 class MovieByGenreView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, pk):
         data = Movie_Genre.objects.all().filter(genre=pk)
         return Response({
@@ -69,6 +71,7 @@ class MovieByGenreView(APIView):
 
 class TrendingMoviesView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request):
         movie = Movie.objects.all().order_by('-ave_rate')[:15]
         serializer = MovieBannerSerializer(movie, many=True)
@@ -77,6 +80,7 @@ class TrendingMoviesView(APIView):
 
 class LatestMoviesView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request):
         movie = Movie.objects.all().order_by('-release_date')[:20]
         serializer = MovieBannerSerializer(movie, many=True)

@@ -24,12 +24,10 @@ class MovieSerializer(serializers.ModelSerializer):
             poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
         except:
             poster = None
-
         try:
             backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
         except:
             backdrop = None
-
         try:
             logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
         except:
@@ -89,9 +87,9 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class MovieImageSerializer(serializers.Serializer):
-    Backdrops = serializers.ListField(child=ImageSerializer())
-    Posters = serializers.ListField(child=ImageSerializer())
-    Logos = serializers.ListField(child=ImageSerializer())
+    backdrops = serializers.ListField(child=ImageSerializer())
+    posters = serializers.ListField(child=ImageSerializer())
+    logos = serializers.ListField(child=ImageSerializer())
 
     def to_representation(self, obj):
         images = MovieImage.objects.filter(movie=obj)
@@ -145,12 +143,10 @@ class MovieBannerSerializer(serializers.ModelSerializer):
             logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
         except:
             logo = None
-
         try:
             poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
         except:
             poster = None
-
         try:
             backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
         except:
@@ -164,4 +160,4 @@ class MovieBannerSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Movie
-        fields = ['id', 'title', 'release_date', 'ave_rate', 'images']
+        fields = ['id', 'title', 'release_date', 'original_country', 'ave_rate', 'summary', 'images']

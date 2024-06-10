@@ -1,15 +1,23 @@
 'use client'
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 
 import requests from '@/utils/requests';
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 
-const ReviewModal = ({ movieId, handleModal }: { movieId: string, handleModal: () => void }) => {
+const ReviewModal = ({ movieId, handleModal, ownReview }: { movieId: string, handleModal: () => void, ownReview: any }) => {
     const [title, setTitle] = useState('');
     const [content, setContent] = useState('');
     const [spoiled, setSpoiled] = useState(false);
+
+    useEffect(() => {
+        if (ownReview !== null) {
+            setTitle(ownReview['title']);
+            setContent(ownReview['content']);
+            setSpoiled(ownReview['spoiled']);;
+        }
+    }, [ownReview]);
 
     const handleTitle = (e: { preventDefault(): unknown; target: { value: any; }; }) => {
         e.preventDefault()
@@ -27,7 +35,6 @@ const ReviewModal = ({ movieId, handleModal }: { movieId: string, handleModal: (
     };
 
     const handleSave = () => {
-        const api = requests.fetchMovieDetails + movieId + '/reviews/new/';
         const token = localStorage.getItem('token');
         const config = {
             headers: {
@@ -36,18 +43,38 @@ const ReviewModal = ({ movieId, handleModal }: { movieId: string, handleModal: (
                 'Accept': 'application/json'
             }
         }
-        const body = JSON.stringify({
-            "title": title,
-            "content": content,
-            "spoiled": spoiled
-        });
-        axios.post(api, body, config)
-            .then((response) => {
-                window.location.reload();
-            })
-            .catch((error) => {
-                console.log(error);
+        
+
+        if (ownReview !== null) {
+            const api = requests.fetchMovieDetails + 'reviews/personal/';
+            const body = JSON.stringify({
+                "movie": movieId,
+                "title": title,
+                "content": content,
+                "spoiled": spoiled
             });
+            axios.put(api, body, config)
+                .then((response) => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        } else {
+            const api = requests.fetchMovieDetails + movieId + '/reviews/new/';
+            const body = JSON.stringify({
+                "title": title,
+                "content": content,
+                "spoiled": spoiled
+            });
+            axios.post(api, body, config)
+                .then((response) => {
+                    window.location.reload();
+                })
+                .catch((error) => {
+                    console.log(error);
+                });
+        }
         handleModal();
     }
 
@@ -71,40 +98,46 @@ const ReviewModal = ({ movieId, handleModal }: { movieId: string, handleModal: (
 
                     <form className="p-4 md:p-5">
                         <div className="mb-4 grid grid-cols-2 gap-4">
-                            <div className="col-span-2">
-                                <div className="flex items-center">
-                                    <svg className="h-6 w-6 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                    </svg>
-                                    <svg className="ms-2 h-6 w-6 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                    </svg>
-                                    <svg className="ms-2 h-6 w-6 text-yellow-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                    </svg>
-                                    <svg className="ms-2 h-6 w-6 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                    </svg>
-                                    <svg className="ms-2 h-6 w-6 text-gray-300" xmlns="http://www.w3.org/2000/svg" fill="currentColor" viewBox="0 0 22 20">
-                                        <path d="M20.924 7.625a1.523 1.523 0 0 0-1.238-1.044l-5.051-.734-2.259-4.577a1.534 1.534 0 0 0-2.752 0L7.365 5.847l-5.051.734A1.535 1.535 0 0 0 1.463 9.2l3.656 3.563-.863 5.031a1.532 1.532 0 0 0 2.226 1.616L11 17.033l4.518 2.375a1.534 1.534 0 0 0 2.226-1.617l-.863-5.03L20.537 9.2a1.523 1.523 0 0 0 .387-1.575Z" />
-                                    </svg>
-                                    <span className="ms-2 text-lg font-bold text-black">3.0 out of 5</span>
-                                </div>
-                            </div>
-                            <div className="col-span-2">
-                                <div className="flex items-center">
-                                    <input type="checkbox"
+                            <div className='col-span-2 flex justify-between'>
+                                    <div className="flex items-center">
+                                        <input type="checkbox"
                                             checked={spoiled}
-                                            onChange={handleSpoiled} 
+                                            onChange={handleSpoiled}
                                             className="h-4 w-4 rounded border-gray-300 bg-gray-100 text-primary-600 focus:ring-2 focus:ring-primary-500 dark:border-gray-600  dark:ring-offset-gray-800 dark:focus:ring-primary-600" />
-                                    <label htmlFor="review-checkbox" className="ms-2 text-sm font-medium text-black">spoiled</label>
+                                        <label htmlFor="review-checkbox" className="ms-2 text-sm font-medium text-black">Spoiled</label>
                                     </div>
-                                </div>
+
+                                    { ownReview ?
+                                        ( <div className="flex items-center gap-0.5">
+                                            { Array.from({ length: ownReview.rate }).map((_, index) => (
+                                                <svg key={index} className="h-6 w-6 text-yellow-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                                </svg>
+                                            ))}
+                                            { Array.from({ length: 5 - ownReview.rate }).map((_, index) => (
+                                                <svg key={index} className="h-6 w-6 text-gray-300" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                                </svg>
+                                            ))}
+                                            <span className="ms-2 text-lg font-bold text-black">3.0 out of 5</span>
+                                            </div> ) :
+                                        ( <div className="flex items-center gap-0.5">
+                                            { Array.from({ length: 5}).map((_, index) => (
+                                                <svg key={index} className="h-6 w-6 text-gray-300 items-center" xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M13.849 4.22c-.684-1.626-3.014-1.626-3.698 0L8.397 8.387l-4.552.361c-1.775.14-2.495 2.331-1.142 3.477l3.468 2.937-1.06 4.392c-.413 1.713 1.472 3.067 2.992 2.149L12 19.35l3.897 2.354c1.52.918 3.405-.436 2.992-2.15l-1.06-4.39 3.468-2.938c1.353-1.146.633-3.336-1.142-3.477l-4.552-.36-1.754-4.17Z" />
+                                                </svg>
+                                            ))}
+                                                <span className="ms-2 text-lg font-bold text-black">3.0 out of 5</span>
+                                            </div>
+                                        )
+                                    }
+                            </div>
+                            
                             <div className="col-span-2">
                                 <label htmlFor="title" className="mb-2 block text-sm font-medium text-black">Review title</label>
                                 <input type="text" value={title}
-                                        onChange={handleTitle} 
-                                        className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-600 focus:ring-primary-600" required />
+                                    onChange={handleTitle}
+                                    className="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-sm text-gray-900 focus:border-primary-600 focus:ring-primary-600" required />
                             </div>
                             <div className="col-span-2">
                                 <label htmlFor="description" className="mb-2 block text-sm font-medium text-black">Review description</label>
@@ -116,7 +149,8 @@ const ReviewModal = ({ movieId, handleModal }: { movieId: string, handleModal: (
 
                         </div>
                         <div className="border-t border-gray-200 pt-4 md:pt-5">
-                            <button type="submit" onClick={handleSave} className="me-2 inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">Add review</button>
+                            
+                            <button type="submit" onClick={handleSave} className="me-2 inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">{ownReview? "Update" : "Save"}</button>
                             <button type="button" onClick={handleModal} className="me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-black focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Cancel</button>
                         </div>
                     </form>

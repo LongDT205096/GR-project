@@ -17,27 +17,7 @@ const logopath = "https://image.tmdb.org/t/p/w200";
 
 const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
     const [firstbannerContent, setBannerContent] = useState(bannerContent[0]);
-    const [bannerMovieDetails, setBannerMovieDetails] = useState(Object);
     const [gradientDirection, setGradientDirection] = useState("left");
-
-    useEffect(() => {
-        const getMovieDetails = async () => {
-            try {
-                const api = requests.fetchMovieDetails + firstbannerContent.id + "/";
-                const movieDetails = await axios.get(api)
-                    .then((response) => {
-                        return response.data;
-                    })
-
-                const moviedetailsjson = await movieDetails;
-                setBannerMovieDetails(moviedetailsjson);
-            } catch (error) {
-                console.error("Error fetching movie data:", error);
-            }
-        };
-
-        getMovieDetails();
-    }, [firstbannerContent]);
 
     useEffect(() => {
         if (typeof window !== "undefined") {
@@ -89,7 +69,7 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
     return (
         <div className="relative text-lg">
             <div
-                key={bannerMovieDetails.id}
+                key={firstbannerContent.id}
                 style={{
                     backgroundImage: `linear-gradient(to  ${gradientDirection}, transparent, black), url(${bannerpath + firstbannerContent.images.backdrop
                         })`,
@@ -99,10 +79,10 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
                 className={`bannerContainer sm:h-[100vh] h-full  sm:aspect-auto  aspect-square w-full relative overflow-x-hidden`}
             >
                 <div className="bannerTextContainer md:w-1/2 w-[75%] absolute md:top-1/5 top-1/5 bottom-2/4 left-[10%]">
-                    {bannerMovieDetails.images &&
-                        bannerMovieDetails.images.logo ? (
+                    {firstbannerContent.images &&
+                        firstbannerContent.images.logo ? (
                         <Image
-                            src={`${logopath}${bannerMovieDetails.images.logo}`}
+                            src={`${logopath}${firstbannerContent.images.logo}`}
                             height={150}
                             width={150}
                             alt="slider_img"
@@ -121,11 +101,11 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
                             {firstbannerContent.title && firstbannerContent.title}
                         </h1>
                     )}
-                    {bannerMovieDetails.release_date && (
+                    {firstbannerContent.release_date && (
                         <ul className="smallContent md:justify-start justify-center flex gap-7 list-none my-3">
-                            <li>{bannerMovieDetails.release_date}</li>
+                            <li>{firstbannerContent.release_date}</li>
                             <li className="list-disc">
-                                {bannerMovieDetails.original_country}
+                                {firstbannerContent.original_country}
                             </li>
                             <li className="list-disc">
                                 <span className="flex items-center flex-row ">
@@ -136,10 +116,10 @@ const Banner = ({ bannerContent }: { bannerContent: any[] }) => {
                         </ul>
                     )}
                     <p className="line-clamp-5 text-base md:text-lg hidden sm:block ">
-                        {bannerMovieDetails.summary && bannerMovieDetails.summary}
+                        {firstbannerContent.summary && firstbannerContent.summary}
                     </p>
                     <Link
-                        href={`/movie/${bannerMovieDetails.id}`}
+                        href={`/movie/${firstbannerContent.id}`}
                         style={{ cursor: "pointer !important" }}
                     >
                         <button className="py-2 px-5 bg-neutral-800 my-3 rounded-md font-bold mx-auto md:mx-0 block text-sm  hover:bg-neutral-800/50 cursor-pointer text-white">

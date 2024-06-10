@@ -34,15 +34,15 @@ async function getLatestMovies() {
 }
 
 async function getTopRated() {
-    const Apiresponse = await fetch(`${requests.fetchTopRated}`, {
-        cache: "no-store",
-    });
-
-    if (!Apiresponse.ok) {
-        return new Error("data not fetching!");
-    }
-
-    return Apiresponse.json();
+    const api = requests.fetchTrending;
+    const topRated = axios.get(api)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            console.error("Error fetching movie data:", error);
+        });
+    return topRated;
 }
 
 // async function getUpcomingMovies() {
@@ -78,8 +78,7 @@ const Home = async () => {
     const latestMoviesData = await getLatestMovies();
     // const upComingMovies = await getUpcomingMovies();
     // const UpcomingMoviesData = upComingMovies.results;
-    const toprated = await getTopRated();
-    const TopRated = toprated.results;
+    const topRatedData = await getTopRated();
 
     return (
         <div>
@@ -109,7 +108,7 @@ const Home = async () => {
                             </Link>
                         </div>
                     </div>
-                    <EmblaCarousel Categories={TopRated} />
+                    <EmblaCarousel Categories={topRatedData} />
                 </div>
             </div>
             <div className="my-5 w-full ml-auto">

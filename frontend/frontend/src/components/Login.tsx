@@ -12,14 +12,6 @@ const Login = () => {
     const [messageType, setMessageType] = useState("danger");
 
     const router = useRouter();
-
-    useEffect(() => {
-        const token = localStorage.getItem("token");
-        if (token) {
-            router.push("/myspace");
-        }
-    }, []);
-
     const loginByGoogle = async () => {
     };
 

@@ -4,7 +4,10 @@ from rest_framework.response import Response
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework_simplejwt.authentication import JWTAuthentication
 
-from .serializer import ReviewSerializer
+from .serializer import (
+    ReviewSerializer,
+    ReviewUpdateSerializer
+)
 from .models import Review
 from ..Rate.models import Rate
 
@@ -12,8 +15,14 @@ from ..Rate.models import Rate
 # Create your views here.
 class ReviewListView(APIView):
     permission_classes = [AllowAny]
+
     def get(self, request, pk):
-        reviews = Review.objects.all().filter(movie=pk)
+        reviews = Review.objects.filter(movie=pk)
+        try:
+            own = reviews.get(account=request.user)
+            user_reviews = ReviewSerializer(own).data
+        except:
+            user_reviews = None
         serializer = ReviewSerializer(reviews, many=True)
         all_rate = Rate.objects.filter(movie=pk)
         rate_count = all_rate.count()
@@ -25,9 +34,10 @@ class ReviewListView(APIView):
 
         return Response({
             'reviews': serializer.data,
+            'own': user_reviews,
             'chart': {
                 'all': rate_count,
-                'rate_num' :{
+                'rate_num': {
                     'rate_1': rate_1,
                     'rate_2': rate_2,
                     'rate_3': rate_3,
@@ -38,7 +48,7 @@ class ReviewListView(APIView):
         })
 
 
-class ReviewPersonal(APIView):
+class ReviewPersonalView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 
@@ -48,16 +58,16 @@ class ReviewPersonal(APIView):
         return Response(serializer.data)
 
     def put(self, request):
-        user_review = Review.objects.filter(account=request.user, movie=request.data['movie'])
-        serializer = ReviewSerializer(user_review, data=request.data)
+        request.data['account'] = request.user.id
+        user_review = Review.objects.get(account=request.user, movie=request.data['movie'])
+        serializer = ReviewUpdateSerializer(user_review, data=request.data)
         if serializer.is_valid():
             serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
-
         return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
 
-class ReviewCreate(APIView):
+class ReviewCreateView(APIView):
     permission_classes = [IsAuthenticated]
     authentication_classes = [JWTAuthentication]
 

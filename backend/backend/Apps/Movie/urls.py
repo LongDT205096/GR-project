@@ -10,4 +10,5 @@ urlpatterns = [
     path('latest/', views.LatestMoviesView.as_view(), name='latest-movies'),
     path("genres/", views.GenreListView.as_view(), name="genres"),
     path("genre=<int:pk>/", views.MovieByGenreView.as_view(), name="movies-genre"),
+    path("search/<str:query>", views.SearchMovieView.as_view(), name="search"),
 ]

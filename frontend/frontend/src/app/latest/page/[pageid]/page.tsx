@@ -90,7 +90,6 @@ function Latest({ params }: { params: { pageid: string } }) {
                                 </Link>
                             </div>
                         </div>
-
                     )
                 ))}
             </div>

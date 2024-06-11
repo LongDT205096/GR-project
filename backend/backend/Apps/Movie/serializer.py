@@ -140,15 +140,15 @@ class MovieBannerSerializer(serializers.ModelSerializer):
 
     def get_images(self, obj):
         try:
-            logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
+            logo = MovieImage.objects.filter(movie=obj.id).filter(type='logo')[:1].get().image.url
         except:
             logo = None
         try:
-            poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
+            poster = MovieImage.objects.filter(movie=obj.id).filter(type='poster')[:1].get().image.url
         except:
             poster = None
         try:
-            backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
+            backdrop = MovieImage.objects.filter(movie=obj.id).filter(type='backdrop')[:1].get().image.url
         except:
             backdrop = None
 
@@ -161,3 +161,5 @@ class MovieBannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ['id', 'title', 'release_date', 'original_country', 'ave_rate', 'summary', 'images']
+
+

@@ -101,14 +101,13 @@ const Movie = async ({ params }: { params: any }) => {
 
     return (
         <div className="overflow-visible">
-            <div className="bg-cover relative bg-fixed bg-center md:min-h-screen h-full w-full flex md:flex-row flex-col" style={movieImages && movieImages.backdrops && movieImages.backdrops[0] ? {
-                backgroundImage: `linear-gradient(to bottom, transparent, black),url(${bannerpath + movieImages.backdrops[0].image})`,
+            <div className="bg-cover relative bg-fixed bg-center md:min-h-screen h-full w-full flex md:flex-row flex-col" style={movieDataAll.images.backdrop ? {
+                backgroundImage: `linear-gradient(to bottom, transparent, black),url(${bannerpath + movieDataAll.images.backdrop})`,
             } : {}}>
                 <div className="imgContainer flex items-center p-3 justify-center flex-initial md:w-1/3 w-full">
                     <Image
-                        src={movieImages.logos &&
-                            movieImages.logos[0] &&
-                            movieImages.logos[0].image ? posterpath + movieImages.posters[0].image : ""}
+                        src={movieDataAll.images &&
+                            movieDataAll.images.poster ? posterpath + movieDataAll.images.poster : ""}
                         alt={movieDataAll.title}
                         width={250}
                         height={250}
@@ -119,11 +118,10 @@ const Movie = async ({ params }: { params: any }) => {
                 </div>
                 <div className="movieDetails p-3 flex items-center md:justify-start justify-center flex-initial overflow-x-hidden md:w-2/3 w-full">
                     <div className="movieDetailsInner md:text-left text-center">
-                        {movieImages.logos &&
-                            movieImages.logos[0] &&
-                            movieImages.logos[0].image && (
+                        {movieDataAll.images &&
+                            movieDataAll.images.logo && (
                                 <Image
-                                    src={`${posterpath}${movieImages.logos[0].image}`}
+                                    src={`${posterpath}${movieDataAll.images.logo}`}
                                     alt={movieDataAll.title}
                                     height={150}
                                     width={150}
@@ -147,7 +145,7 @@ const Movie = async ({ params }: { params: any }) => {
                                     </Link>
                                 ))}
                         </ul>
-                        <ul className="flex gap-5 text-slate-300 sm:justify-start justify-center my-2">
+                        <ul className="flex text-lg gap-5 text-slate-300 sm:justify-start justify-center my-2">
                             <li>{movieDataAll.duration + " " + "Mins"}</li>
                             <li className="list-disc">{movieDataAll.release_date}</li>
                             <li className="list-disc">{movieDataAll.original_country}</li>

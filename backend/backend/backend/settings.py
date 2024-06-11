@@ -251,8 +251,8 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 ELASTICSEARCH_DSL={
     'default': {
-        "hosts": "https://localhost:9200",
-        "http_auth": ("elastic", "elastic"),
+        "hosts": "http://localhost:9200",
+        "http_auth": ("elastic", "n6BNoz_RzJupTgkUEBS7"),
     }
 }
 

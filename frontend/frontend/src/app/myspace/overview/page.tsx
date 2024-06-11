@@ -70,7 +70,6 @@ const Overview = () => {
     }, []);
 
     const onClick = () => {
-        console.log(profile);
         setEditing(!isEditing);
         if (!isEditing) {
             setTempProfile({ ...profile });
@@ -116,6 +115,7 @@ const Overview = () => {
     const handleCancel = (e: any) => {
         e.preventDefault();
         setProfile({ ...tempProfile });
+        setSelectedCountry(tempProfile.country);
         setTempProfile({});
         setChanged(false);
         setEditing(false);

@@ -9,17 +9,20 @@ class ActorSerializer(serializers.ModelSerializer):
 
 
 class ActorMovieSerializer(serializers.ModelSerializer):
-    poster = serializers.SerializerMethodField()
+    images = serializers.SerializerMethodField()
 
-    def get_poster(self, obj):
+    def get_images(self, obj):
         try:
-            return MovieImage.objects.filter(movie=obj, type="poster")[:1].get().image.url
+            poster = MovieImage.objects.filter(movie=obj, type="poster")[:1].get().image.url
         except:
-            return None
+            poster = None
+        return {
+            'poster': poster
+        }
 
     class Meta:
         model = Movie
-        fields = ('id', 'title', 'release_date', 'ave_rate', 'poster')
+        fields = ('id', 'title', 'release_date', 'ave_rate', 'images')
 
 
 class ActorImageSerializer(serializers.ModelSerializer):

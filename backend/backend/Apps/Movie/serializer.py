@@ -24,12 +24,10 @@ class MovieSerializer(serializers.ModelSerializer):
             poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
         except:
             poster = None
-
         try:
             backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
         except:
             backdrop = None
-
         try:
             logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
         except:
@@ -89,9 +87,9 @@ class ImageSerializer(serializers.ModelSerializer):
 
 
 class MovieImageSerializer(serializers.Serializer):
-    Backdrops = serializers.ListField(child=ImageSerializer())
-    Posters = serializers.ListField(child=ImageSerializer())
-    Logos = serializers.ListField(child=ImageSerializer())
+    backdrops = serializers.ListField(child=ImageSerializer())
+    posters = serializers.ListField(child=ImageSerializer())
+    logos = serializers.ListField(child=ImageSerializer())
 
     def to_representation(self, obj):
         images = MovieImage.objects.filter(movie=obj)
@@ -142,17 +140,15 @@ class MovieBannerSerializer(serializers.ModelSerializer):
 
     def get_images(self, obj):
         try:
-            logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
+            logo = MovieImage.objects.filter(movie=obj.id).filter(type='logo')[:1].get().image.url
         except:
             logo = None
-
         try:
-            poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
+            poster = MovieImage.objects.filter(movie=obj.id).filter(type='poster')[:1].get().image.url
         except:
             poster = None
-
         try:
-            backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
+            backdrop = MovieImage.objects.filter(movie=obj.id).filter(type='backdrop')[:1].get().image.url
         except:
             backdrop = None
 

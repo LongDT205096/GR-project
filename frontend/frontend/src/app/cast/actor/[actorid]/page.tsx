@@ -30,7 +30,6 @@ async function getPersonsMovie(params: any) {
     const api = requests.fetchActorDetails + params.actorid + "/movies/";
     const PersonsMovieresponse = await axios.get(api)
         .then((response) => {
-            console.log(response.data);
             return response.data;
         })
 
@@ -52,7 +51,7 @@ const Actor = async ({ params }: any) => {
                             alt={personDetails.name}
                             width={200}
                             height={200}
-                            className="m-auto w-[300px]"
+                            className="m-auto w-[300px] rounded-md"
                             unoptimized
                         />
                         <h1 className="font-bold mt-3 text-xl text-center">
@@ -68,11 +67,20 @@ const Actor = async ({ params }: any) => {
                         <p>
                             {" "}
                             {personDetails.birthday != null ? (
-                                <span className="font-bold">Date Of Birth: </span>
+                                <span className="font-bold">Birthday: </span>
                             ) : (
                                 ""
                             )}
                             {personDetails.birthday}
+                        </p>
+                        <p>
+                            {" "}
+                            {personDetails.deathday != null ? (
+                                <span className="font-bold">Day of Death: </span>
+                            ) : (
+                                ""
+                            )}
+                            {personDetails.deathday}
                         </p>
                         <p>
                             {" "}

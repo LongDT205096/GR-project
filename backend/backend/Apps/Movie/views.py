@@ -2,6 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
 
+
 from .models import Movie, Genre, Movie_Genre
 from .serializer import (
     GenreSerializer,
@@ -84,4 +85,32 @@ class LatestMoviesView(APIView):
     def get(self, request):
         movie = Movie.objects.all().order_by('-release_date')[:20]
         serializer = MovieBannerSerializer(movie, many=True)
+        return Response(serializer.data)
+
+
+
+from elasticsearch_dsl import Q
+from .documents import MovieDocument
+
+
+class SearchMovieView(APIView):
+    permission_classes = [AllowAny]
+    document_class = MovieDocument
+
+    def generate_q_expression(self, query):
+        return Q("multi_match", query=query, fields=["title"], fuzziness="AUTO")
+    
+    def get(self, request, query):
+        q = self.generate_q_expression(query)
+        if not q:
+            return Response({"error": "query is required"}, status=400)
+        
+        search = self.document_class.search().query(q)
+        response = search.execute()
+        hits = response.hits.hits
+        for hit in hits:
+            hit = hit.to_dict()
+            hit["_source"]['id'] = hit["_id"]
+            
+        serializer = MovieBannerSerializer([hit["_source"] for hit in hits], many=True)
         return Response(serializer.data)

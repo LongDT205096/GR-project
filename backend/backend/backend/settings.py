@@ -46,9 +46,11 @@ INSTALLED_APPS = [
     'djoser',
     'social_django',
     'django_countries',
+    'django_elasticsearch_dsl',
     'rest_framework',
     'rest_framework_simplejwt',
     'rest_framework_simplejwt.token_blacklist',
+    'storages',
     "vote",
 
     #models
@@ -83,6 +85,8 @@ REST_FRAMEWORK = {
         'rest_framework_simplejwt.authentication.JWTAuthentication',
         'rest_framework.authentication.TokenAuthentication',
     ),
+    "DEFAULT_PAGINATION_CLASS": "rest_framework.pagination.LimitOffsetPagination",
+    "PAGE_SIZE": 25,
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -243,6 +247,15 @@ SOCIAL_AUTH_GOOGLE_OAUTH2_EXTRA_DATA = ['first_name', 'last_name']
 
 # Internationalization
 # https://docs.djangoproject.com/en/5.0/topics/i18n/
+
+
+ELASTICSEARCH_DSL={
+    'default': {
+        "hosts": "http://localhost:9200",
+        "http_auth": ("elastic", "n6BNoz_RzJupTgkUEBS7"),
+    }
+}
+
 
 LANGUAGE_CODE = 'en-us'
 

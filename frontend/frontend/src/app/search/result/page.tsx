@@ -68,6 +68,5 @@ const Results = async ({ searchParams }: { searchParams: any }) => {
             </div>
         </div>
     );
-};
 
 export default Results;

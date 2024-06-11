@@ -49,6 +49,7 @@ const Review = ({ params }: { params: { movieid: string } }) => {
                 setOwnReview(null);
             }
             setLoading(false);
+            console.log(data)
         }
         fetchData();
     }, []);

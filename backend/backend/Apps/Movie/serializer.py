@@ -161,5 +161,3 @@ class MovieBannerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Movie
         fields = ['id', 'title', 'release_date', 'original_country', 'ave_rate', 'summary', 'images']
-
-

@@ -21,7 +21,7 @@ const Register = () => {
             .then((res) => {
                 setMessage("Registration successful");
                 setMessageType("success");
-                router.push("/login");
+                router.push("/auth/login");
             })
             .catch((err) => {
                 const error = JSON.parse(err.request.response);
@@ -38,7 +38,7 @@ const Register = () => {
     return (
         <div className="w-full h-[100vh] flex justify-center items-center">
             <div className="bg-neutral-700 p-5 w-[75%] h-3/4 flex rounded-2xl shadow-lg max-w-3xl">
-                <div className="sm:flex hidden w-1/2 h-full" style={{ background: "url(./assets/img/register.jpg)", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
+                <div className="sm:flex hidden w-1/2 h-full" style={{ background: "url(../assets/img/register.jpg)", backgroundPosition: "center", backgroundRepeat: "no-repeat", backgroundSize: "cover" }}>
                 </div>
                 <div className="sm:w-1/2 w-full p-2 flex flex-col justify-center items-center">
                     <form onSubmit={handleSubmit} className="text-black">
@@ -86,7 +86,7 @@ const Register = () => {
                             Register
                         </button>
                     </form>
-                    <p className="my-3">Already have account ? <Link href={'/login'} className="font-bold">Login</Link></p>
+                    <p className="my-3">Already have account ? <Link href={'/auth/login'} className="font-bold">Login</Link></p>
                 </div>
             </div>
         </div>

@@ -134,7 +134,7 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
                             <button
                                 type='button'
                                 className='h-10 px-4 text-lg rounded-md text-white hover:font-semibold'
-                                onClick={handleSave}
+                                onClick={handleRemove}
                             >
                                 Clear my rating
                             </button>

@@ -59,7 +59,7 @@ const Navbar = () => {
                     </Link>
 
                     <Link
-                        href={ user ? ("/myspace/overview") : ("/login") }
+                        href={ user ? ("/myspace/overview") : ("/auth/login") }
                         className="flex items-center link-container hover:text-white"
                     >   
                         <MySpaceIcon />

@@ -17,6 +17,18 @@ export const register = async (email: string, password: string, re_password: str
 }
 
 
+export const activate = async (uid: string, token: string) => {
+    const config = {
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    };
+    const body = JSON.stringify({ uid, token });
+
+    return axios.post(auth_request.fetchActivate, body, config);
+}
+
+
 export const login = async (email: string, password: string) => {
     const config = {
         headers: {

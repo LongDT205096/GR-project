@@ -32,7 +32,7 @@ class RatePersonal(APIView):
                 movie.ave_rate = movie.average_rating()
                 movie.save()
                 return Response({'message': 'Rate created'}, status=201)
-            except :
+            except:
                 return Response(serializer.errors, status=400)
             
     def put(self, request, pk):

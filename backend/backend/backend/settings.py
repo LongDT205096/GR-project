@@ -173,7 +173,7 @@ EMAIL_HOST_USER = "dinhthanhlong1270@gmail.com"
 EMAIL_HOST_PASSWORD = "ofrrpugbogsspirx"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-
+DOMAIN = "localhost:3000"
 
 #SIMPLE JWT SETTINGS
 SIMPLE_JWT = {
@@ -212,7 +212,7 @@ DJOSER = {
     'USER_CREATE_PASSWORD_RETYPE': True,
     'SET_PASSWORD_RETYPE': True,
     'SEND_ACTIVATION_EMAIL': True,
-    'ACTIVATION_URL': 'account/auth/users/activation/{uid}/{token}',
+    'ACTIVATION_URL': 'auth/activate/{uid}/{token}',
     'SEND_CONFIRMATION_EMAIL': True,
     'PASSWORD_CHANGED_EMAIL_CONFIRMATION': True,
     'PASSWORD_RESET_CONFIRM_URL': 'password/reset/confirm/{uid}/{token}',

@@ -14,7 +14,6 @@ async function getSearchMovieData(searchParams: any) {
         .catch((error) => {
             return error;
         });
-    console.log(searchMovie);
     return searchMovie;
 }
 
@@ -68,5 +67,6 @@ const Results = async ({ searchParams }: { searchParams: any }) => {
             </div>
         </div>
     );
+}
 
 export default Results;

@@ -43,7 +43,6 @@ const ReviewModal = ({ movieId, handleModal, ownReview }: { movieId: string, han
                 'Accept': 'application/json'
             }
         }
-        
 
         if (ownReview !== null) {
             const api = requests.fetchMovieDetails + 'reviews/personal/';
@@ -75,6 +74,29 @@ const ReviewModal = ({ movieId, handleModal, ownReview }: { movieId: string, han
                     console.log(error);
                 });
         }
+        handleModal();
+    }
+
+    const handleDelete = () => {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            },
+            data: {
+                "movie": movieId
+            }
+        }
+        const api = requests.fetchMovieDetails + 'reviews/personal/';
+        axios.delete(api, config)
+            .then((response) => {
+                window.location.reload();
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         handleModal();
     }
 
@@ -148,10 +170,14 @@ const ReviewModal = ({ movieId, handleModal, ownReview }: { movieId: string, han
                             </div>
 
                         </div>
-                        <div className="border-t border-gray-200 pt-4 md:pt-5">
-                            
-                            <button type="submit" onClick={handleSave} className="me-2 inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">{ownReview? "Update" : "Save"}</button>
-                            <button type="button" onClick={handleModal} className="me-2 rounded-lg border border-gray-200 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-black focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Cancel</button>
+                        <div className="border-t border-gray-200 pt-4 md:pt-5 flex justify-between">
+                            <div>
+                                <button type="submit" onClick={handleSave} className="me-2 inline-flex items-center rounded-lg bg-primary-700 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-primary-800 focus:outline-none focus:ring-4 focus:ring-primary-300">{ownReview? "Update" : "Save"}</button>
+                                <button type="button" onClick={handleModal} className="me-2 rounded-lg border border-gray-400 bg-white px-5 py-2.5 text-sm font-medium text-gray-900 hover:bg-gray-100 hover:text-black focus:z-10 focus:outline-none focus:ring-4 focus:ring-gray-100">Cancel</button>
+                            </div>
+                            <div>
+                                { ownReview && <button type="button" onClick={handleDelete} className="rounded-lg border border-red-500 bg-red-500 px-5 py-2.5 text-sm font-medium text-white hover:bg-red-600 focus:z-10 focus:outline-none focus:ring-4 focus:ring-red-300">Delete</button>}
+                            </div>
                         </div>
                     </form>
                 </div>

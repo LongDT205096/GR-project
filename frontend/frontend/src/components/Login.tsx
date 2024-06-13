@@ -95,7 +95,7 @@ const Login = () => {
                                 Log In
                             </button>
                         </form>
-                        <Link href="forgot" className="text-base mt-4 cursor-pointer text-white hover:underline hover:font-semibold inline-block">
+                        <Link href="/auth/forgot" className="text-base mt-4 cursor-pointer text-white hover:underline hover:font-semibold inline-block">
                             Forgot Password?
                         </Link>
                         <div className="mt-4 grid grid-cols-3 items-center text-gray-500">
@@ -145,7 +145,7 @@ const Login = () => {
 
                         <div className="text-base flex justify-between items-center mt-3">
                             <p className="text-white">If you don&#39;t have an account...</p>
-                            <Link href={`/register`}>
+                            <Link href={`/auth/register`}>
                                 <button className="py-2 px-5 ml-3 bg-white border rounded-xl hover:scale-110 duration-300 text-gray-900 border-blue-400  ">
                                     Register
                                 </button>

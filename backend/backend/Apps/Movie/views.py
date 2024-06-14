@@ -1,9 +1,9 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import AllowAny
+from django.db.models import Prefetch
 
-
-from .models import Movie, Genre, Movie_Genre
+from .models import Movie, Genre, Movie_Genre, MovieImage
 from .serializer import (
     GenreSerializer,
     MovieSerializer,
@@ -18,11 +18,12 @@ class MovieDetailView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
+        movie = Movie.objects.select_related('director').prefetch_related(
+            Prefetch('movie_genre', queryset=Movie_Genre.objects.select_related('genre')),
+            Prefetch('movieimage_set', queryset=MovieImage.objects.filter(type__in=['poster', 'backdrop', 'logo']))
+        ).get(pk=pk)
         serializer = MovieSerializer(movie)
-
         return Response(serializer.data)
-
 
 class MovieImageView(APIView):
     permission_classes = [AllowAny]

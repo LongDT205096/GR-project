@@ -52,7 +52,7 @@ class Movie(models.Model):
     revenue = models.IntegerField(default=0)
     budget = models.IntegerField(default=0)
     original_country = CountryField(blank_label="(select country)", blank=True)
-    director = models.ForeignKey("Director.Director", on_delete=models.CASCADE)
+    director = models.ForeignKey("Director.Director", on_delete=models.CASCADE, related_name="movie_director")
 
     def __str__(self):
         return self.title
@@ -65,13 +65,13 @@ class Movie(models.Model):
     
 
 class Movie_Actor(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="movie_actor")
     actor = models.ForeignKey("Actor.Actor", on_delete=models.CASCADE)
     character_name = models.CharField(max_length=50)
 
 
 class Movie_Genre(models.Model):
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="movie_genre")
     genre = models.ForeignKey(Genre, on_delete=models.CASCADE)
 
 
@@ -86,7 +86,7 @@ class MovieVideo(models.Model):
         ("Opening Credits", "Opening Credits"),
     ]
 
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="movievideo_set")
     title = models.CharField(max_length=50)
     link = models.FileField(null=True, blank=True)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
@@ -101,7 +101,6 @@ class MovieImage(models.Model):
         ("posters", "poster"),
         ("logos", "logo"),
     ]
-    movie = models.ForeignKey(Movie, on_delete=models.CASCADE)
+    movie = models.ForeignKey(Movie, on_delete=models.CASCADE, related_name="movieimage_set")
     image = models.ImageField(upload_to="movie/", null=True, blank=True)
     type = models.CharField(max_length=20, choices=TYPE_CHOICES)
-

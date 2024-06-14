@@ -10,6 +10,7 @@ class MovieSerializer(serializers.ModelSerializer):
     genres = serializers.SerializerMethodField()
     director = serializers.SerializerMethodField()
     images = serializers.SerializerMethodField()
+    trailer = serializers.SerializerMethodField()
     
     def get_genres(self, obj):
         genre_list = Movie_Genre.objects.filter(movie=obj)
@@ -19,31 +20,30 @@ class MovieSerializer(serializers.ModelSerializer):
             "name": genre.name 
         } for genre in genres]
     
-    def get_images(self, obj):
-        try:
-            poster = MovieImage.objects.filter(movie=obj).filter(type='poster')[:1].get().image.url
-        except:
-            poster = None
-        try:
-            backdrop = MovieImage.objects.filter(movie=obj).filter(type='backdrop')[:1].get().image.url
-        except:
-            backdrop = None
-        try:
-            logo = MovieImage.objects.filter(movie=obj).filter(type='logo')[:1].get().image.url
-        except:
-            logo = None
-
-        return {
-                "logo": logo,
-                "poster": poster,
-                "backdrop": backdrop
-            }
-
-
     def get_director(self, obj):
-        director = Director.objects.get(movie=obj)
-        return {"id": director.id, "name": director.name}
+        return {"id": obj.director.id, "name": obj.director.name}
 
+    def get_images(self, obj):
+        images = {
+            "logo": None,
+            "poster": None,
+            "backdrop": None
+        }
+        for image in obj.movieimage_set.all():
+            if image.type in images:
+                images[image.type] = image.image.url
+        return images
+
+    def get_trailer(self, obj):
+        trailer = {
+            "link": None,
+        }
+        for video in obj.movievideo_set.all():
+            if video.type == "Trailer":
+                trailer["link"] = video.link.url
+                break
+        return trailer
+    
     class Meta:
         model = Movie
         fields = '__all__'

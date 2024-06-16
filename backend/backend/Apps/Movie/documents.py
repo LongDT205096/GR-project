@@ -15,6 +15,8 @@ class MovieDocument(Document):
     class Django:
         model = Movie
         fields = [
-            "id",
-            "title"
+            'id',
+            'title', 
+            'release_date', 
+            'summary'
         ]

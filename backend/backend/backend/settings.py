@@ -60,7 +60,6 @@ INSTALLED_APPS = [
     'Apps.Movie',
     'Apps.Rate',
     'Apps.Review',
-    'Apps.Recommendation',
     'Apps.Profile',
     'Apps.Watchlist',
 ]

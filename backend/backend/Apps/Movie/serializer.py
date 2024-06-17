@@ -1,9 +1,12 @@
 from rest_framework import serializers
 from .models import Movie, Genre, MovieImage, MovieVideo, Movie_Actor, Movie_Genre
 from ..Actor.models import Actor, ActorImage
-from ..Director.models import Director
-from ..Review.models import Review
-from ..Rate.models import Rate
+
+
+class MovieUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Movie
+        fields = ['ave_rate']
 
 
 class MovieSerializer(serializers.ModelSerializer):

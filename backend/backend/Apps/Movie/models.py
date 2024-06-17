@@ -59,6 +59,7 @@ class Movie(models.Model):
 
     def average_rating(self) -> float:
         rate = Rate.objects.filter(movie=self).aggregate(Avg('rate'))['rate__avg']
+        rate = round(rate, 1)
         if rate is None:
             return 0.0
         return rate

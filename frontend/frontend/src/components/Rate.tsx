@@ -12,16 +12,16 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
     const [hoverRating, setHoverRating] = useState(0);
 
     const api = requests.fetchMovieDetails + movieId + '/rate/';
-    const token = localStorage.getItem('token');
-    const config = {
-        headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer ' + token,
-            'Accept': 'application/json'
-        }
-    }
-
+    
     async function fetchOwnRating() {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            }
+        };
         axios.get(api, config)
             .then((response) => {
                 if (response.data.rate) {
@@ -40,6 +40,14 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
     }
 
     const handleSave = () => {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            }
+        };
         const body = JSON.stringify({
             "movie": movieId,
             "rate": rating
@@ -66,6 +74,14 @@ const Rate = ({ movieId, movieTitle }: { movieId: string, movieTitle: string }) 
     }
 
     const handleRemove = () => {
+        const token = localStorage.getItem('token');
+        const config = {
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer ' + token,
+                'Accept': 'application/json'
+            }
+        };
         axios.delete(api, config)
             .then((response) => {
                 handleModal();

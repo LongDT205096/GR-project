@@ -163,4 +163,5 @@ cython_debug/
 
 /media/images
 backend/.idea
+backend/ml-100k
 .idea

@@ -1,11 +1,14 @@
+'use client';
 import Banner from "@/components/Banner";
 import EmblaCarousel from "@/components/EmblaCarousel";
 import UpcomingRelease from "@/components/UpcomingRelease";
+import Loader from "@/components/Loader";
 import requests from "@/utils/requests";
 
 import { BiSolidChevronRight } from "react-icons/bi";
 import Link from "next/link";
 import axios from "axios";
+import { use, useEffect, useState } from "react";
 
 axios.defaults.baseURL = "http://127.0.0.1:8000/";
 
@@ -34,7 +37,7 @@ async function getLatestMovies() {
 }
 
 async function getTopRated() {
-    const api = requests.fetchTrending;
+    const api = requests.fetchTopRated;
     const topRated = axios.get(api)
         .then((response) => {
             return response.data;
@@ -44,6 +47,28 @@ async function getTopRated() {
         });
     return topRated;
 }
+
+async function getRecommendMovies() {
+    const token = localStorage.getItem('token');
+    const api = requests.fetchRecommend;
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json'
+        }
+    }
+
+    const recommendMovies = axios.get(api, config)
+        .then((response) => {
+            return response.data;
+        })
+        .catch((error) => {
+            console.error("Error fetching movie data:", error);
+        });
+    return recommendMovies;
+}
+
 
 // async function getUpcomingMovies() {
 //     const currentDate = new Date();
@@ -73,13 +98,36 @@ async function getTopRated() {
 //     return `${year}-${month}-${day}`;
 // }
 
-const Home = async () => {
-    const trendingMovieData = await getTrendingMovie();
-    const latestMoviesData = await getLatestMovies();
-    // const upComingMovies = await getUpcomingMovies();
-    // const UpcomingMoviesData = upComingMovies.results;
-    const topRatedData = await getTopRated();
+const Home = () => {
+    const [trendingMovieData, setTrendingMovieData] = useState([]);
+    const [latestMoviesData, setLatestMoviesData] = useState([]);
+    const [topRatedData, setTopRatedData] = useState([]);
+    const [recommendMoviesData, setRecommendMoviesData] = useState([]);
+    const [UpcomingMoviesData, setUpcomingMoviesData] = useState([]);
+    const [loading, setLoading] = useState(true);
+    useEffect(() => {
+        const fetchData = async () => {
+            const trendingMovie = await getTrendingMovie();
+            const latestMovies = await getLatestMovies();
+            // const upComingMovies = await getUpcomingMovies();
+            // const UpcomingMoviesData = upComingMovies.results;
+            const topRated = await getTopRated();
+            const recommendMovies = await getRecommendMovies();
+            await Promise.all([trendingMovieData, latestMoviesData, topRatedData, recommendMoviesData]);
+            
+            setTrendingMovieData(trendingMovie);
+            setLatestMoviesData(latestMovies);
+            setTopRatedData(topRated);
+            setRecommendMoviesData(recommendMovies);
+            setLoading(false);
+        };
+        fetchData();
+    }, []);
 
+    if (loading) {
+        return <Loader />;
+    }
+    
     return (
         <div>
             <Banner bannerContent={trendingMovieData} />
@@ -111,6 +159,7 @@ const Home = async () => {
                     <EmblaCarousel Categories={topRatedData} />
                 </div>
             </div>
+
             <div className="my-5 w-full ml-auto">
                 <div className="sm:ml-16 ml-0 latestinner h-full overflow-hidden">
                     <div>Hello world</div>
@@ -118,6 +167,20 @@ const Home = async () => {
                 </div>
             </div>
 
+            { recommendMoviesData ? (
+                <div className="latestReleases my-5 w-full ml-auto">
+                    <div className="sm:ml-16 ml-0 latestinner h-full overflow-hidden">
+                        <div className="heading md:mx-0 mx-auto md:w-auto w-[90%]">
+                            <div className="w-full flex justify-between items-center">
+                                <h1 className="text-2xl my-3">Recommend for you</h1>
+                                <Link className="cursor-pointer" href={"/toprated/page/1"}>
+                                    <BiSolidChevronRight className="text-white text-2xl w-6 h-6 mx-3" />
+                                </Link>
+                            </div>
+                        </div>
+                        <EmblaCarousel Categories={recommendMoviesData} />
+                    </div>
+                </div> ) : "" }
         </div>
     );
 };

@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import BaseUserManager
 
 from ...Profile.models import Profile
+from ...Watchlist.models import Watchlist
 
 class AccountManager(BaseUserManager):
     def create_user(self, email, password=None):
@@ -16,6 +17,8 @@ class AccountManager(BaseUserManager):
 
         new_profile = Profile(account=user)
         new_profile.save()
+        new_watchlist = Watchlist(account=user)
+        new_watchlist.save()
 
         return user
 

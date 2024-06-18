@@ -1,4 +1,6 @@
 from django.db import models
+import datetime
+
 from vote.models import VoteModel
 from ..Account.models import Account
 from ..Movie.models import Movie
@@ -11,3 +13,4 @@ class Review(VoteModel, models.Model):
     title = models.CharField(max_length=255)
     content = models.TextField(max_length=2000, blank=True)
     spoiled = models.BooleanField(default=False)
+    timestamp = models.DateField(default=datetime.date.today)

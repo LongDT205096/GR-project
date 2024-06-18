@@ -1,9 +1,11 @@
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework_simplejwt.authentication import JWTAuthentication
+from django.db.models import Prefetch
 
-
-from .models import Movie, Genre, Movie_Genre
+from ..Rate.cache import recommendations
+from .models import Movie, Genre, Movie_Genre, MovieImage
 from .serializer import (
     GenreSerializer,
     MovieSerializer,
@@ -13,14 +15,18 @@ from .serializer import (
     MovieActorSerializer
 )
 
+import random
+
 
 class MovieDetailView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request, pk):
-        movie = Movie.objects.get(pk=pk)
+        movie = Movie.objects.select_related('director').prefetch_related(
+            Prefetch('movie_genre', queryset=Movie_Genre.objects.select_related('genre')),
+            Prefetch('movieimage_set', queryset=MovieImage.objects.filter(type__in=['poster', 'backdrop', 'logo']))
+        ).get(pk=pk)
         serializer = MovieSerializer(movie)
-
         return Response(serializer.data)
 
 
@@ -83,10 +89,31 @@ class LatestMoviesView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        movie = Movie.objects.all().order_by('-release_date')[:20]
+        movie = Movie.objects.all().order_by('-release_date')[:15]
         serializer = MovieBannerSerializer(movie, many=True)
         return Response(serializer.data)
 
+class TopRatedMoviesView(APIView):
+    permission_classes = [AllowAny]
+
+    def get(self, request):
+        movie = Movie.objects.all().order_by('-ave_rate')[:15]
+        serializer = MovieBannerSerializer(movie, many=True)
+        return Response(serializer.data)
+
+
+class RecommendMoviesView(APIView):
+    permission_classes = [IsAuthenticated]
+    authentication_classes = [JWTAuthentication]
+
+    def get(self, request):
+        user = request.user
+        recs = recommendations.recommend(int(user.id))[:15]
+        result = []
+        for rec in recs:
+            movie = Movie.objects.get(pk=rec)
+            result.append(MovieBannerSerializer(movie).data)
+        return Response(result)
 
 
 from elasticsearch_dsl import Q

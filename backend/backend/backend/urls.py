@@ -21,12 +21,12 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('account/', include('Apps.Account.urls')),
     path('account/profile/', include('Apps.Profile.urls')),
+    path('account/watchlist/', include('Apps.Watchlist.urls')),
     path('movie/', include('Apps.Movie.urls')),
     path('movie/', include('Apps.Review.urls')),
     path('movie/', include('Apps.Rate.urls')),
     path('actor/', include('Apps.Actor.urls')),
     # path('director/', include('Apps.Director.urls')),
     # path('movie/review/', include('Apps.Review.urls')),
-    # path('watchlist/', include('Apps.Watchlist.urls')),
     
 ]

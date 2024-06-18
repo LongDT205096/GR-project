@@ -14,4 +14,4 @@ class Actor(models.Model):
 
 class ActorImage(models.Model):
     image = models.ImageField(upload_to="actor/", blank=True, null=True)
-    actor = models.ForeignKey(Actor, on_delete=models.CASCADE)
+    actor = models.ForeignKey(Actor, on_delete=models.CASCADE, related_name="actor_images")

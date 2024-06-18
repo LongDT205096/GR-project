@@ -8,6 +8,8 @@ urlpatterns = [
     path('<int:pk>/actors/', views.MovieActorView.as_view(), name='movie-actors'),
     path('trending/', views.TrendingMoviesView.as_view(), name='trending-movies'),
     path('latest/', views.LatestMoviesView.as_view(), name='latest-movies'),
+    path('top_rated/', views.TopRatedMoviesView.as_view(), name='top-rated-movies'),
+    path('recommend/', views.RecommendMoviesView.as_view(), name='recommend-movies'),
     path("genres/", views.GenreListView.as_view(), name="genres"),
     path("genre=<int:pk>/", views.MovieByGenreView.as_view(), name="movies-genre"),
     path("search/<str:query>", views.SearchMovieView.as_view(), name="search"),

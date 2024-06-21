@@ -50,6 +50,9 @@ async function getTopRated() {
 
 async function getRecommendMovies() {
     const token = localStorage.getItem('token');
+    if (!token) {
+        return null;
+    }
     const api = requests.fetchRecommend;
     const config = {
         headers: {
@@ -102,9 +105,10 @@ const Home = () => {
     const [trendingMovieData, setTrendingMovieData] = useState([]);
     const [latestMoviesData, setLatestMoviesData] = useState([]);
     const [topRatedData, setTopRatedData] = useState([]);
-    const [recommendMoviesData, setRecommendMoviesData] = useState([]);
+    const [recommendMoviesData, setRecommendMoviesData] = useState(null);
     const [UpcomingMoviesData, setUpcomingMoviesData] = useState([]);
     const [loading, setLoading] = useState(true);
+
     useEffect(() => {
         const fetchData = async () => {
             const trendingMovie = await getTrendingMovie();
@@ -113,6 +117,7 @@ const Home = () => {
             // const UpcomingMoviesData = upComingMovies.results;
             const topRated = await getTopRated();
             const recommendMovies = await getRecommendMovies();
+            
             await Promise.all([trendingMovieData, latestMoviesData, topRatedData, recommendMoviesData]);
             
             setTrendingMovieData(trendingMovie);

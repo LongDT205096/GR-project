@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
           <div className='sm:h-[100vh] sm:w-auto w-full fixed sm:left-0 bottom-0 z-50'>
             <Navbar />
           </div>
-          <div className='w-full sm:mb-0 mb-16'>
+          <div className='w-full sm:mb-0 mb-8'>
             {children}
           </div>
         </div>

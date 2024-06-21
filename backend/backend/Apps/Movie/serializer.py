@@ -142,25 +142,32 @@ class MovieBannerSerializer(serializers.ModelSerializer):
     images = serializers.SerializerMethodField()
 
     def get_images(self, obj):
-        try:
-            logo = MovieImage.objects.filter(movie=obj.id).filter(type='logo')[:1].get().image.url
-        except:
-            logo = None
-        try:
-            poster = MovieImage.objects.filter(movie=obj.id).filter(type='poster')[:1].get().image.url
-        except:
-            poster = None
-        try:
-            backdrop = MovieImage.objects.filter(movie=obj.id).filter(type='backdrop')[:1].get().image.url
-        except:
-            backdrop = None
-
-        return {
-            "logo": logo,   
-            "poster": poster,
-            "backdrop": backdrop
+        images = {
+            "logo": None,
+            "poster": None,
+            "backdrop": None
         }
+        for image in obj.movieimage_set.all():
+            if image.type in images:
+                images[image.type] = image.image.url
+            if all(images.values()):
+                break
+        return images
 
     class Meta:
         model = Movie
         fields = ['id', 'title', 'release_date', 'original_country', 'ave_rate', 'summary', 'images']
+
+
+class MovieSliceSerializer(serializers.ModelSerializer):
+    poster = serializers.SerializerMethodField()
+
+    def get_poster(self, obj):
+        for image in obj.movieimage_set.all():
+            if image.type == 'poster':
+                return image.image.url
+        return None
+
+    class Meta:
+        model = Movie
+        fields = ['id', 'title', 'release_date', 'ave_rate', 'poster']

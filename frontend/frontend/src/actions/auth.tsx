@@ -100,17 +100,14 @@ export const checkAuthenticated = () => {
 
 export const getProfile = () => {
     const token = localStorage.getItem('token');
-    if(token) {
-        const config = {
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + token,
-                'Accept': 'application/json'
-            }
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json'
         }
-        return axios.get(profile_request.fetchProfile, config)
     }
-    return null;
+    return axios.get(profile_request.fetchProfile, config)
 };
 
 

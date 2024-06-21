@@ -4,47 +4,44 @@ import Select from 'react-select';
 import countryList from 'react-select-country-list';
 import axios from 'axios';
 
-import Widget from '@/components/Widget';
 import { getProfile, updateProfile } from '@/actions/auth';
 import requests from '@/utils/requests';
+import Widget from '@/components/Widget';
+import Loader from '@/components/Loader';
+import EmblaCarousel from '@/components/EmblaCarousel';
 
 axios.defaults.baseURL = 'http://127.0.0.1:8000/';
 
-const token = localStorage.getItem('token');
-const config = {
-    headers: {
-        'Content-Type': 'application/json',
-        'Authorization': 'Bearer ' + token,
-        'Accept': 'application/json'
+async function getRecommendMovies() {
+    const token = localStorage.getItem('token');
+    const config = {
+        headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer ' + token,
+            'Accept': 'application/json'
+        }
     }
-}
-
-// async function getPersonalRating() {
-//     const api = requests.fetchMovieDetails + "rates/personal/";
-//     const personalRating = axios.get(api, config)
-//         .then((response) => {
-//             return response.data;
-//         })
-//     return personalRating;
-// }
-
-async function getPersonalReview() {
-    const api = requests.fetchMovieDetails + "reviews/personal/";
-    const personalReview = axios.get(api, config)
+    const api = requests.fetchRecommend;
+    const recommendMovies = axios.get(api, config)
         .then((response) => {
             return response.data;
         })
-    return personalReview;
+        .catch((error) => {
+            console.error("Error fetching movie data:", error);
+        });
+    return recommendMovies;
 }
 
 const Overview = () => {
     const [profile, setProfile] = useState(Object);
     const [tempProfile, setTempProfile] = useState(Object);
-    const [personalRating, setPersonalRating] = useState([]);
-    const [personalReview, setPersonalReview] = useState([]);
+    const [recommendMovies, setRecommendMovies] = useState(null);
+
     const [isEditing, setEditing] = useState(false);
-    const [selectedCountry, setSelectedCountry] = useState();
     const [changed, setChanged] = useState(false);
+    const [selectedCountry, setSelectedCountry] = useState();
+
+    const [isLoading, setIsLoading] = useState(true);
 
     const options = useMemo(() => countryList().getData(), []);
     const countryOptions = useMemo(() => countryList(), []);
@@ -52,19 +49,15 @@ const Overview = () => {
     useEffect(() => {
         const fetchData = async () => {
             const profile = await getProfile();
-            // const rate = await getPersonalRating();
-            const review = await getPersonalReview();
-            if (profile) {
-                profile.data.country = profile.data.country ? countryOptions.getLabel(profile.data.country) : '';
-                setProfile(profile.data);
-                setTempProfile(profile.data);
-            }
-            // if (rate) {
-            //     setPersonalRating(rate);
-            // }
-            if (review) {
-                setPersonalReview(review);
-            }
+            const recommend = await getRecommendMovies();
+
+            await Promise.all([profile, recommend]);
+
+            profile.data.country = profile.data.country ? countryOptions.getLabel(profile.data.country) : '';
+            setProfile(profile.data);
+            setTempProfile(profile.data);
+            setRecommendMovies(recommend);
+            setIsLoading(false);
         };
         fetchData();
     }, []);
@@ -121,11 +114,15 @@ const Overview = () => {
         setEditing(false);
     }
 
+    if (isLoading) {
+        return <Loader />;
+    }
+
     return (
-        <div className="container mx-auto my-5 p-5 text-lg">
+        <div className="container mx-auto my-10 text-lg h-full bg-white">
             <Widget />
-            <div className="w-full h-64">
-                <form className="bg-white p-3 shadow-sm px-[5%] pt-[2%]">
+            <div className="w-ful">
+                <form className="p-3 px-[5%] pt-[2%]">
                     <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8">
                         <span className="text-green-500">
                             <svg className="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -136,8 +133,8 @@ const Overview = () => {
                         </span>
                         <span className="tracking-wide">About</span>
                     </div>
-                    <div className="text-gray-700">
-                        <div className="grid md:grid-cols-2 text-sm">
+                    <div className="text-gray-700 w-[80%] mx-auto">
+                        <div className="grid md:grid-cols-2 text-sm mt-4 gap-x-2">
                             <div className="grid grid-cols-2">
                                 <div className="px-4 py-2 font-semibold">First Name</div>
                                 {isEditing ? (
@@ -198,50 +195,17 @@ const Overview = () => {
                     </div>
                 </form>
 
-                <div className="bg-white p-3 shadow-sm px-[5%] pb-[2%] flex justify-start">
-                    <div className='flex w-[50%] p-2'>
-                        <div className='w-full'>
-                            <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                                <span className="text-green-500">
-                                    <svg className="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                </span>
-                                <span className="tracking-wide">Your Ratings</span>
+                { recommendMovies ? (
+                <div className="w-full mx-auto">
+                    <div className="sm:ml-16 ml-0 h-full overflow-hidden">
+                        <div className="heading md:mx-0 mx-auto md:w-auto w-[90%]">
+                            <div className="w-full flex justify-between items-center">
+                                <h1 className="text-2xl my-3 text-gray-700">Recommend for you</h1>
                             </div>
-                            <ul className="list-inside space-y-2">
-                                <li className='border-gray-400 border-2'>
-                                    <div className="text-teal-600">Hello World</div>
-                                    <div className="text-gray-500 text-xs">March 2020 - Now</div>
-                                </li>
-                            </ul>
                         </div>
+                        <EmblaCarousel Categories={recommendMovies} />
                     </div>
-                    <div className='flex w-[50%] p-2'>
-                        <div className='w-full'>
-                            <div className="flex items-center space-x-2 font-semibold text-gray-900 leading-8 mb-3">
-                                <span className="text-green-500">
-                                    <svg className="h-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
-                                        stroke="currentColor">
-                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                            d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-                                    </svg>
-                                </span>
-                                <span className="tracking-wide">Your Reviews</span>
-                            </div>
-                            <ul className="list-inside space-y-2">
-                                {personalReview.map((review: { movie: string }, index) => (
-                                    <li key={index} className='border-gray-400 border-2'>
-                                        <div className="text-teal-600">{review.movie}</div>
-                                        <div className="text-gray-500 text-xs">March 2020 - Now</div>
-                                    </li>
-                                ))}
-                            </ul>
-                        </div>
-                    </div>
-                </div>
+                </div> ) : "" }
             </div>
         </div>
     );

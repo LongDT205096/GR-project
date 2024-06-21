@@ -12,7 +12,8 @@ from .serializer import (
     MovieBannerSerializer,
     MovieImageSerializer,
     MovieVideoSerializer,
-    MovieActorSerializer
+    MovieActorSerializer,
+    MovieSliceSerializer
 )
 
 import random
@@ -80,7 +81,9 @@ class TrendingMoviesView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        movie = Movie.objects.all().order_by('-ave_rate')[:15]
+        movie = Movie.objects.select_related('director').prefetch_related(
+            Prefetch('movieimage_set', queryset=MovieImage.objects.filter(type__in=['poster', 'backdrop', 'logo']))
+        ).all().order_by('-ave_rate')[:15]
         serializer = MovieBannerSerializer(movie, many=True)
         return Response(serializer.data)
 
@@ -89,16 +92,21 @@ class LatestMoviesView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        movie = Movie.objects.all().order_by('-release_date')[:15]
-        serializer = MovieBannerSerializer(movie, many=True)
+        movie = Movie.objects.prefetch_related(
+            Prefetch('movieimage_set', queryset=MovieImage.objects.filter(type__in=['poster']))
+        ).all().order_by('-release_date')[:15]
+        serializer = MovieSliceSerializer(movie, many=True)
         return Response(serializer.data)
+
 
 class TopRatedMoviesView(APIView):
     permission_classes = [AllowAny]
 
     def get(self, request):
-        movie = Movie.objects.all().order_by('-ave_rate')[:15]
-        serializer = MovieBannerSerializer(movie, many=True)
+        movie = Movie.objects.prefetch_related(
+            Prefetch('movieimage_set', queryset=MovieImage.objects.filter(type__in=['poster']))
+        ).all().order_by('-ave_rate')[:15]
+        serializer = MovieSliceSerializer(movie, many=True)
         return Response(serializer.data)
 
 
@@ -107,12 +115,16 @@ class RecommendMoviesView(APIView):
     authentication_classes = [JWTAuthentication]
 
     def get(self, request):
-        user = request.user
-        recs = recommendations.recommend(int(user.id))[:15]
+        recs = recommendations.recommend(int(request.user.id))[:10]
         result = []
         for rec in recs:
-            movie = Movie.objects.get(pk=rec)
-            result.append(MovieBannerSerializer(movie).data)
+            try:
+                movie = Movie.objects.prefetch_related(
+                    Prefetch('movieimage_set', queryset=MovieImage.objects.filter(type__in=['poster']))
+                ).get(pk=rec)
+                result.append(MovieSliceSerializer(movie).data)
+            except:
+                pass
         return Response(result)
 
 

@@ -8,6 +8,7 @@ import CastCarousel from "@/components/Cast";
 import EmblaCarousel from "@/components/EmblaCarousel";
 // import OtherImageGallery from "@/components/OtherImageGallery";
 import WatchlistIcon from "@/components/WatchlistIcon";
+import ListIcon from "@/components/ListIcon";
 import Trailer from "@/components/Trailer";
 import Review from "@/components/Review";
 import Rate from "@/components/Rate";
@@ -18,40 +19,47 @@ const posterpath = "https://image.tmdb.org/t/p/w500";
 
 async function getMovieResponse(movieid: string) {
     const api = requests.fetchMovieDetails + movieid + "/";
-    const MovieApiresponse = await axios.get(api)
-        .then((response) => {
-            return response.data;
-        })
-    return MovieApiresponse;
-}
-
-async function getMovieImages(movieid: string) {
-    const api = requests.fetchMovieDetails + movieid + "/images/";
-    const OtherGalleryImages = axios.get(api)
-        .then((response) => {
-            return response.data;
-        })
-    return OtherGalleryImages;
+    try {
+        console.time("getMovieResponse")
+        const response = await axios.get(api);
+        console.timeEnd("getMovieResponse")
+        return response.data;
+    } catch (error) {
+        throw new Error("Error fetching movie data: " + error);
+    }
 }
 
 async function getMovieCast(movieid: string) {
     const api = requests.fetchMovieDetails + movieid + "/actors/";
-    const MovieCastresponse = axios.get(api)
-        .then((response) => {
-            return response.data;
-        })
-    return MovieCastresponse;
+    try {
+        console.time("getMovieCast")
+        const response = await axios.get(api);
+        console.timeEnd("getMovieCast")
+        return response.data;
+    } catch (error) {
+        throw new Error("Error fetching movie cast: " + error);
+    }
 }
 
-async function getMovieReview(movieid: String) {
+async function getMovieImages(movieid: string) {
+    const api = requests.fetchMovieDetails + movieid + "/images/";
+    try {
+        const response = await axios.get(api);
+        return response.data;
+    } catch (error) {
+        throw new Error("Error fetching movie images: " + error);
+    }
+}
+
+async function getMovieReview(movieid: string) {
     const api = requests.fetchMovieDetails + movieid + "/reviews/";
-    const movieReview = await axios.get(api)
-        .then((response) => {
-            return response.data;
-        })
-    return movieReview;
+    try {
+        const response = await axios.get(api);
+        return response.data;
+    } catch (error) {
+        throw new Error("Error fetching movie reviews: " + error);
+    }
 }
-
 
 // async function getRecommendations(params: { movieid: string; }) {
 //     const Recommendations = await fetch(
@@ -83,13 +91,13 @@ async function getMovieReview(movieid: String) {
 //     return similarMovies.json();
 // }
 
-
-
 const Movie = async ({ params }: { params: any }) => {
     const movieDataAll = await getMovieResponse(params.movieid);
     const movieCast = await getMovieCast(params.movieid);
     const movieImages = await getMovieImages(params.movieid);
     const movieReview = await getMovieReview(params.movieid);
+    
+
     // // const recommendationsCall = await getRecommendations(params);
     // const recommendations = recommendationsCall.results;
     // // const similarmoviesCall = await getSimilar(params);
@@ -161,7 +169,7 @@ const Movie = async ({ params }: { params: any }) => {
                         </ul>
                         <ul className="flex gap-5 text-slate-300 sm:justify-start justify-center my-2">
                             <li className="flex items-center justify-center rounded-full bg-black p-4">
-                                <WatchlistIcon favMovie={movieDataAll.id} />
+                                <ListIcon favMovie={movieDataAll.id} />
                             </li>
                             <li className="flex items-center justify-center rounded-full bg-black p-4">
                                 <WatchlistIcon favMovie={movieDataAll.id} />
@@ -187,13 +195,13 @@ const Movie = async ({ params }: { params: any }) => {
             <div className="h-screen flex">
                 <div className="w-3/4 flex flex-col items-center">
                     <div className="w-[80%]">
-                        <CastCarousel Casts={movieCast.actors} movieId={params.movieid} />
+                        {/* <CastCarousel Casts={movieCast.actors} movieId={params.movieid} /> */}
                     </div>
 
                     <hr className="w-[80%] mx-auto my-4 border-t-2 border-gray-500" />
 
                     <div className="w-[80%]">
-                        <Review Reviews={movieReview.reviews} movieId={params.movieid} />
+                        {/* <Review Reviews={movieReview.reviews} movieId={params.movieid} /> */}
                     </div>
 
                     {/* <div className="otherImagesGalleryContainer">
